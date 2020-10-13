@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorWhit">#fff</color>
+    <color name="colorPrimary">#fabb1e</color>
+    <color name="colorPrimaryDark">#f4ac12</color>
+    <color name="colorAccent">#fabb1e</color>
+    <color name="background">#FAFAFA</color>
+    <color name="white">#FFFFFF</color>
+    <color name="trans">#00000000</color>
+    <color name="gray">#A3A2A2</color>
+    <color name="lightGray">#BFBFBF</color>
+    <color name="blue">#6ba4e7</color>
+
+    <color name="darkGray">#5c616c</color>
+    <color name="yellow">#fabb1e</color>
+    <color name="lightYellow">#F3CC6B</color>
+    <color name="mainPrimaryDarker">#f4ac12</color>
+    <color name="dark">#757575</color>
+    <color name="black">#000</color>
+
+    <color name="darkBlue">#4B73FF</color>
+
+    <color name="example_1_bg">#3A284C</color>
+    <color name="example_1_bg_light">#433254</color>
+    <color name="example_1_white_light">#4DFFFFFF</color>
+    <color name="example_1_white">#D9FFFFFF</color>
+
+    <color name="transparent">#00ffffff</color>
+    <color name="danger">#ff3548</color>
+    <color name="success">#01c851</color>
+    <color name="warning">#ff8800</color>
+    <color name="info">#33b5e7</color>
+    <color name="secondary">#aa66cd</color>
+    <color name="defaultColor">#2abbac</color>
+    <color name="primary">#4385f5</color>
+
+
+</resources>

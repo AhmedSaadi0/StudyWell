@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Study Well</string>
+    <string name="word">Words</string>
+    <string name="symbol">Symbol</string>
+    <string name="meaning">Meaning</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+</resources>
