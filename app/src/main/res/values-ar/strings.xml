@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">أدرس جيدا</string>
+    <string name="word">كلمات</string>
+    <string name="symbol">الرمز</string>
+    <string name="meaning">المعنى</string>
+    <string name="save">حفظ</string>
+    <string name="delete">حذف</string>
+    <string name="words">كلمة</string>
+    <string name="sentences">جملة</string>
+    <string name="empty">يرجى كتابة كلمة</string>
+</resources>

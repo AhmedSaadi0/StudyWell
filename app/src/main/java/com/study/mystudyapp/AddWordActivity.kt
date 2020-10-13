@@ -5,10 +5,11 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_add_word.*
+import java.util.*
+import kotlin.collections.HashMap
 
 class AddWordActivity : AppCompatActivity() {
     private var id = "";
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,27 +34,32 @@ class AddWordActivity : AppCompatActivity() {
 
         val data: MutableMap<String, String> = HashMap()
 
-        if (!add_word.text.isNullOrEmpty())
+        if (add_word.text.isNullOrEmpty()) {
+            add_word.error = getString(R.string.empty)
+        } else {
             data["word"] = add_word.text.toString()
 
-        if (!add_symbol.text.isNullOrEmpty())
-            data["symbol"] = add_symbol.text.toString()
+            if (!add_symbol.text.isNullOrEmpty())
+                data["symbol"] = add_symbol.text.toString()
 
-        if (!add_meaning.text.isNullOrEmpty())
-            data["meaning"] = add_meaning.text.toString()
+            if (!add_meaning.text.isNullOrEmpty())
+                data["meaning"] = add_meaning.text.toString()
+
+            data["date"] = getDateToFirebase(Date())
+            data["year"] = getYearToFirebase(Date())
 
 
-        if (id.isNotEmpty())
-            FirebaseFirestore.getInstance()
-                .collection("words").document(id)
-                .set(data)
-        else
-            FirebaseFirestore.getInstance()
-                .collection("words").document()
-                .set(data)
+            if (id.isNotEmpty())
+                FirebaseFirestore.getInstance()
+                    .collection("words").document(id)
+                    .set(data)
+            else
+                FirebaseFirestore.getInstance()
+                    .collection("words").document()
+                    .set(data)
 
-        finish()
-
+            finish()
+        }
     }
 
     fun delete(view: View) {

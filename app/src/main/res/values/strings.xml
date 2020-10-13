@@ -5,4 +5,7 @@
     <string name="meaning">Meaning</string>
     <string name="save">Save</string>
     <string name="delete">Delete</string>
+    <string name="words">Words</string>
+    <string name="sentences">Sentences</string>
+    <string name="empty">Please write a word</string>
 </resources>
