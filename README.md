@@ -1,3 +1,3 @@
 # StudyWell
-I developed this app to help me study other languages
+I am going to develope this app to help me study other languages
 <br>Still under development
