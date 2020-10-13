@@ -23,7 +23,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: MainRVAdapter
     private var started = false
     private var word = true
-    private var date: Date? = null
+
+    companion object {
+        var date: Date? = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,10 +71,10 @@ class MainActivity : AppCompatActivity() {
 
         model.forEachIndexed { index, model ->
             if (date == model.date) {
-                if (word && model.word != null && model.word.length < 6) {
+                if (word && model.word != null && !model.word.contains(" ")) {
                     viewedModel.add(model)
                     adapter.notifyDataSetChanged()
-                } else if (!word && model.word != null && model.word.length >= 6) {
+                } else if (!word && model.word != null && model.word.contains(" ")) {
                     viewedModel.add(model)
                     adapter.notifyDataSetChanged()
                 }
@@ -93,6 +96,7 @@ class MainActivity : AppCompatActivity() {
         FirebaseFirestore.getInstance()
             .collection("words")
             .whereEqualTo("year", year)
+            .orderBy("word")
             .addSnapshotListener { value, error ->
 
                 model.clear()

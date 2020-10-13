@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
+import com.study.mystudyapp.ui.main.MainActivity
 import kotlinx.android.synthetic.main.activity_add_word.*
 import java.util.*
 import kotlin.collections.HashMap
@@ -45,9 +46,13 @@ class AddWordActivity : AppCompatActivity() {
             if (!add_meaning.text.isNullOrEmpty())
                 data["meaning"] = add_meaning.text.toString()
 
-            data["date"] = getDateToFirebase(Date())
-            data["year"] = getYearToFirebase(Date())
-
+            if (MainActivity.date != null) {
+                data["date"] = getDateToFirebase(MainActivity.date!!)
+                data["year"] = getYearToFirebase(MainActivity.date!!)
+            } else {
+                data["date"] = getDateToFirebase(Date())
+                data["year"] = getYearToFirebase(Date())
+            }
 
             if (id.isNotEmpty())
                 FirebaseFirestore.getInstance()
