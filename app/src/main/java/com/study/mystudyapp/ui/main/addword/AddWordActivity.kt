@@ -1,9 +1,13 @@
-package com.study.mystudyapp
+package com.study.mystudyapp.ui.main.addword
 
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.study.mystudyapp.R
+import com.study.mystudyapp.getDateToFirebase
+import com.study.mystudyapp.getYearToFirebase
 import com.study.mystudyapp.ui.main.MainActivity
 import kotlinx.android.synthetic.main.activity_add_word.*
 import java.util.*
@@ -56,10 +60,12 @@ class AddWordActivity : AppCompatActivity() {
 
             if (id.isNotEmpty())
                 FirebaseFirestore.getInstance()
+                    .collection("users").document(FirebaseAuth.getInstance().uid!!)
                     .collection("words").document(id)
                     .set(data)
             else
                 FirebaseFirestore.getInstance()
+                    .collection("users").document(FirebaseAuth.getInstance().uid!!)
                     .collection("words").document()
                     .set(data)
 
@@ -69,6 +75,7 @@ class AddWordActivity : AppCompatActivity() {
 
     fun delete(view: View) {
         FirebaseFirestore.getInstance()
+            .collection("users").document(FirebaseAuth.getInstance().uid!!)
             .collection("words").document(id)
             .delete()
 

@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".AddWordActivity">
+    tools:context=".ui.main.addword.AddWordActivity">
 
 
     <com.google.android.material.textfield.TextInputLayout

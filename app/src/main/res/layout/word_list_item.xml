@@ -39,15 +39,37 @@
 
                 />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/meaning"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="meaning" />
+                android:orientation="horizontal"
+                >
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/meaning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_toStartOf="@id/speak"
+                    android:text="meaning" />
+
+                <ImageView
+                    android:id="@+id/speak"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:src="@drawable/ic_baseline_play_circle_outline_24" />
+
+            </RelativeLayout>
+
 
         </LinearLayout>
 

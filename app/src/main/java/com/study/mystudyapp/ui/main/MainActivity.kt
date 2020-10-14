@@ -6,17 +6,32 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
 import com.github.sundeepk.compactcalendarview.domain.Event
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.study.mystudyapp.*
+import com.study.mystudyapp.R
 import com.study.mystudyapp.database.models.WordsModel
+import com.study.mystudyapp.databinding.MainActivityBinding
+import com.study.mystudyapp.getDateToCalender
+import com.study.mystudyapp.getDateToFirebase
+import com.study.mystudyapp.getYearToFirebase
+import com.study.mystudyapp.ui.login.LogInActivity
+import com.study.mystudyapp.ui.main.addword.AddWordActivity
 import kotlinx.android.synthetic.main.main_activity.*
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.kodein
+import org.kodein.di.generic.instance
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), KodeinAware {
+
+    override val kodein by kodein()
+    private val factory: MainViewModelFactory by instance()
 
     private val model = mutableListOf<WordsModel>()
     private val viewedModel = mutableListOf<WordsModel>()
@@ -30,16 +45,39 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
+
+        val binding: MainActivityBinding =
+            DataBindingUtil.setContentView(this, R.layout.main_activity)
+
+        val viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
+        binding.viewModel = viewModel
+
+
+        //moveData()
+
         date = Date()
         initRV()
         initCalender()
-        getData(getYearToFirebase(Date()))
+        getData()
         initBottomTabLayout()
+
+        main_toolbar.setNavigationOnClickListener {
+            startActivity(Intent(this, LogInActivity::class.java))
+        }
+
+
+        viewModel.user.observe(this, {
+            main_toolbar.title = it.user_email
+        })
+
     }
 
     fun add(view: View) {
-        startActivity(Intent(this, AddWordActivity::class.java))
+        if (FirebaseAuth.getInstance().uid != null) {
+            startActivity(Intent(this, AddWordActivity::class.java))
+        } else {
+            startActivity(Intent(this, LogInActivity::class.java))
+        }
     }
 
     private fun initCalender() {
@@ -57,7 +95,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onMonthScroll(firstDayOfNewMonth: Date?) {
                 if (firstDayOfNewMonth != null)
-                    getData(getYearToFirebase(firstDayOfNewMonth))
+                    getData()
             }
 
 
@@ -91,34 +129,64 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun getData(year: String) {
+    private fun getData() {
 
+        val year = getYearToFirebase(date!!)
+        if (FirebaseAuth.getInstance().uid != null) {
+            FirebaseFirestore.getInstance()
+                .collection("users").document(FirebaseAuth.getInstance().uid!!)
+                .collection("words")
+                .whereEqualTo("year", year)
+                .orderBy("word")
+                .addSnapshotListener { value, _ ->
+
+                    model.clear()
+                    value?.forEach {
+                        model.add(
+                            WordsModel(
+                                id = it.id,
+                                word = it.getString("word"),
+                                symbol = it.getString("symbol"),
+                                meaning = it.getString("meaning"),
+                                date = it.getString("date"),
+                                year = it.getString("year")
+                            )
+                        )
+
+                        adapter.notifyDataSetChanged()
+
+                    }
+
+                    setEvents()
+                }
+        }
+    }
+
+    private fun moveData() {
         FirebaseFirestore.getInstance()
             .collection("words")
-            .whereEqualTo("year", year)
-            .orderBy("word")
-            .addSnapshotListener { value, error ->
-
-                model.clear()
+            .addSnapshotListener { value, _ ->
                 value?.forEach {
-                    model.add(
-                        WordsModel(
-                            id = it.id,
-                            word = it.getString("word"),
-                            symbol = it.getString("symbol"),
-                            meaning = it.getString("meaning"),
-                            date = it.getString("date"),
-                            year = it.getString("year")
-                        )
-                    )
+                    val data: MutableMap<String, String> = HashMap()
 
-                    adapter.notifyDataSetChanged()
+                    if (it.getString("date") != null && it.getString("year") != null && it.getString(
+                            "symbol"
+                        ) != null && it.getString("word") != null && it.getString("meaning") != null
+                    ) {
+                        data["word"] = it.getString("word")!!
+                        data["symbol"] = it.getString("symbol")!!
+                        data["meaning"] = it.getString("meaning")!!
+                        data["date"] = it.getString("date")!!
+                        data["year"] = it.getString("year")!!
 
+
+                        FirebaseFirestore.getInstance()
+                            .collection("users").document(FirebaseAuth.getInstance().uid!!)
+                            .collection("words").document()
+                            .set(data)
+                    }
                 }
-
-                setEvents()
             }
-
     }
 
     private fun setEvents() {
@@ -132,7 +200,10 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        filterData(getDateToFirebase(Date()))
+        if (date == null) {
+            date = Date()
+        }
+        filterData(getDateToFirebase(date!!))
         started = !started
 
     }

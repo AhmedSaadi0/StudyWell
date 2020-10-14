@@ -8,4 +8,18 @@
     <string name="words">Words</string>
     <string name="sentences">Sentences</string>
     <string name="empty">Please write a word</string>
+    <string name="sign_in">Sign in</string>
+    <string name="email">Email</string>
+    <string name="password">password</string>
+    <string name="save_data">Save Data</string>
+    <string name="log_in">Login</string>
+    <string name="forget_password">Reset password</string>
+    <string name="adding_user">Add new user</string>
+    <string name="don_t_have_an_account_nsign_up_here">Don\'t have an account?\nSign Up Here</string>
+    <string name="ok">OK</string>
+    <string name="network_error">Network error</string>
+    <string name="can_not_log_in">Can not log in</string>
+    <string name="please_write_password">Please write the password</string>
+    <string name="please_write_email">Please write the email</string>
+
 </resources>

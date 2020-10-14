@@ -9,4 +9,18 @@
     <string name="words">كلمة</string>
     <string name="sentences">جملة</string>
     <string name="empty">يرجى كتابة كلمة</string>
+    <string name="sign_in">تسجيل الدخول</string>
+    <string name="email">ايميل</string>
+    <string name="password">كلمة السر</string>
+    <string name="save_data">حفظ البيانات</string>
+    <string name="log_in">تسجيل الدخول</string>
+    <string name="forget_password">اعادة كلمة السر</string>
+    <string name="adding_user">اضافة مستخدم جديد</string>
+    <string name="don_t_have_an_account_nsign_up_here">Don\'t have an account?\nSign Up Here</string>
+    <string name="ok">Ok</string>
+    <string name="network_error">خطأ في الشبكة</string>
+    <string name="can_not_log_in">لم نتمكن من الدخول</string>
+    <string name="please_write_password">اكتب كلمة السر</string>
+    <string name="please_write_email">اكتب الايميل</string>
+
 </resources>

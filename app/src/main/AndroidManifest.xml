@@ -11,10 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.study.mystudyapp.AddWordActivity"
+            android:name=".ui.login.LogInActivity"
             android:theme="@style/AddTheme" />
-
-        <activity android:name="com.study.mystudyapp.ui.main.MainActivity">
+        <activity
+            android:name=".ui.main.addword.AddWordActivity"
+            android:theme="@style/AddTheme" />
+        <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
