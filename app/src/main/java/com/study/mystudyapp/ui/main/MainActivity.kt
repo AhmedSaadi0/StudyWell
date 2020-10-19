@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         date = Date()
         initRV()
         initCalender()
-        getData()
+        //getData()
         initBottomTabLayout()
 
         main_toolbar.setNavigationOnClickListener {
@@ -66,9 +66,18 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         }
 
 
-        viewModel.user.observe(this, {
-            main_toolbar.title = it.user_email
+        viewModel.user.observe(this, androidx.lifecycle.Observer {
+            if (it != null && it.user_email != null) {
+                main_toolbar.title = it.user_email
+            }
         })
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getData()
 
     }
 
@@ -109,12 +118,35 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
         model.forEachIndexed { index, model ->
             if (date == model.date) {
-                if (word && model.word != null && !model.word.contains(" ")) {
+                model.test = false
+                if (word && model.pinyin != null && !model.pinyin.contains(" ")) {
                     viewedModel.add(model)
                     adapter.notifyDataSetChanged()
-                } else if (!word && model.word != null && model.word.contains(" ")) {
+                } else if (!word && model.pinyin != null && model.pinyin.contains(" ")) {
                     viewedModel.add(model)
                     adapter.notifyDataSetChanged()
+                }
+            }
+
+        }
+    }
+
+    private fun createTest(date: String) {
+        viewedModel.clear()
+        adapter.notifyDataSetChanged()
+
+        model.random()
+
+        model.forEachIndexed { _, model ->
+
+            if (date == model.date) {
+                if (model.pinyin != null) {
+
+                    model.test = true
+                    Log.d("TAG", model.test.toString())
+                    viewedModel.add(model)
+                    adapter.notifyDataSetChanged()
+
                 }
             }
 
@@ -145,8 +177,8 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                         model.add(
                             WordsModel(
                                 id = it.id,
-                                word = it.getString("word"),
-                                symbol = it.getString("symbol"),
+                                pinyin = it.getString("word"),
+                                word = it.getString("symbol"),
                                 meaning = it.getString("meaning"),
                                 date = it.getString("date"),
                                 year = it.getString("year")
@@ -208,7 +240,6 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
     }
 
-
     private fun initBottomTabLayout() {
         main_tab_layout.addTab(
             main_tab_layout.newTab().setText(getString(R.string.words))
@@ -217,6 +248,10 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         main_tab_layout.addTab(
             main_tab_layout.newTab().setText(getString(R.string.sentences))
                 .setTag("sentences")
+        )
+        main_tab_layout.addTab(
+            main_tab_layout.newTab().setText(getString(R.string.test))
+                .setTag("test")
         )
 
         main_tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -227,6 +262,9 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                 } else if (tab?.tag == "sentences" && date != null) {
                     word = false
                     filterData(getDateToFirebase(date!!))
+                } else if (tab?.tag == "test" && date != null) {
+                    word = true
+                    createTest(getDateToFirebase(date!!))
                 }
 
                 Log.d("TAG", "onTabSelected: Selected${tab?.tag}")

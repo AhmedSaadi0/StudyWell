@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">أدرس جيدا</string>
-    <string name="word">كلمات</string>
-    <string name="symbol">الرمز</string>
+    <string name="pinyin">Pinyin</string>
+    <string name="chinese">Chinese</string>
     <string name="meaning">المعنى</string>
     <string name="save">حفظ</string>
     <string name="delete">حذف</string>
@@ -22,5 +22,6 @@
     <string name="can_not_log_in">لم نتمكن من الدخول</string>
     <string name="please_write_password">اكتب كلمة السر</string>
     <string name="please_write_email">اكتب الايميل</string>
+    <string name="test">اختبار</string>
 
 </resources>

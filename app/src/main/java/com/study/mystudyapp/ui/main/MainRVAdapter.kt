@@ -37,8 +37,17 @@ class MainRVAdapter(private val context: Context, private val words: List<WordsM
 
     override fun onBindViewHolder(holder: MainRVViewHolder, position: Int) {
         holder.itemView.word.text = words[position].word
-        holder.itemView.symbol.text = words[position].symbol
-        holder.itemView.meaning.text = words[position].meaning
+
+        if (!words[position].test) {
+            holder.itemView.pinyin.text = words[position].pinyin
+            holder.itemView.meaning.text = words[position].meaning
+        }else{
+            holder.itemView.pinyin.text = ""
+            holder.itemView.meaning.text = ""
+
+        }
+
+
         if (position % 2 == 0) {
             holder.itemView.con.setPadding(0, 0, 10, 0)
         } else {
@@ -46,19 +55,36 @@ class MainRVAdapter(private val context: Context, private val words: List<WordsM
         }
 
         holder.itemView.con.setOnClickListener {
-            Intent(context, AddWordActivity::class.java).also {
-                it.putExtra("id", words[position].id)
-                it.putExtra("word", words[position].word)
-                it.putExtra("symbol", words[position].symbol)
-                it.putExtra("meaning", words[position].meaning)
+            if (!words[position].test) {
+                Intent(context, AddWordActivity::class.java).also {
+                    it.putExtra("id", words[position].id)
+                    it.putExtra("word", words[position].pinyin)
+                    it.putExtra("symbol", words[position].word)
+                    it.putExtra("meaning", words[position].meaning)
 
-                context.startActivity(it)
+                    context.startActivity(it)
+                }
+            } else {
+                holder.itemView.pinyin.text = ""
+                holder.itemView.meaning.text = ""
+
+                holder.itemView.pinyin.text = words[position].pinyin
+                holder.itemView.meaning.text = words[position].meaning
             }
         }
 
-        holder.itemView.speak.setOnClickListener {
-            mTTS.speak(words[position].symbol, TextToSpeech.QUEUE_FLUSH, null)
+
+
+        if (words[position].word.isNullOrBlank()) {
+            holder.itemView.speak.visibility = View.GONE
+        } else {
+            holder.itemView.speak.visibility = View.VISIBLE
         }
+
+        holder.itemView.speak.setOnClickListener {
+            mTTS.speak(words[position].word, TextToSpeech.QUEUE_FLUSH, null)
+        }
+
 
     }
 

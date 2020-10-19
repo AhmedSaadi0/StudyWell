@@ -63,6 +63,19 @@
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:backgroundTint="@color/colorWhit"
+            android:onClick="add"
+            android:src="@drawable/ic_baseline_add_24"
+            android:tint="@color/yellow"
+            app:backgroundTint="@color/colorWhit" />
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -78,19 +91,6 @@
 
         </androidx.core.widget.NestedScrollView>
 
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:backgroundTint="@color/colorWhit"
-            android:onClick="add"
-            android:src="@drawable/ic_baseline_add_24"
-            android:tint="@color/yellow"
-            app:backgroundTint="@color/colorWhit" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/main_tab_layout"

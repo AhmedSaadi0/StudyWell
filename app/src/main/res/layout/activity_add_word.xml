@@ -8,34 +8,32 @@
     android:orientation="vertical"
     tools:context=".ui.main.addword.AddWordActivity">
 
-
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:hint="@string/word"
-        app:startIconContentDescription="@string/word">
+        android:hint="@string/chinese"
+        app:startIconContentDescription="@string/chinese">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/add_word"
+            android:id="@+id/add_symbol"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:hint="@string/symbol"
-        app:startIconContentDescription="@string/symbol">
+        android:hint="@string/pinyin"
+        app:startIconContentDescription="@string/pinyin">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/add_symbol"
+            android:id="@+id/add_word"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text" />
