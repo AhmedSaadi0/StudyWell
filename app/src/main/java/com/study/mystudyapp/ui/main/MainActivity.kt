@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
     }
 
-    fun selector(p: WordsModel): String? = p.pinyin
+    private fun selector(p: WordsModel): String? = p.pinyin
 
     private fun filterData(date: String) {
         viewedModel.clear()
