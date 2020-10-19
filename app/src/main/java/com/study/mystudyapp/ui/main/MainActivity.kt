@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
     private lateinit var adapter: MainRVAdapter
     private var started = false
     private var word = true
+    private var test = false
 
     companion object {
         var date: Date? = null
@@ -112,19 +113,28 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
     }
 
+    fun selector(p: WordsModel): String? = p.pinyin
+
     private fun filterData(date: String) {
         viewedModel.clear()
         adapter.notifyDataSetChanged()
 
+        model.sortBy { selector(it) }
+
         model.forEachIndexed { index, model ->
             if (date == model.date) {
                 model.test = false
-                if (word && model.pinyin != null && !model.pinyin.contains(" ")) {
+                // true & false -> word
+                // false & false -> sentence
+                // false & true -> test
+                if (word && !test && model.pinyin != null && !model.pinyin.contains(" ")) {
                     viewedModel.add(model)
                     adapter.notifyDataSetChanged()
-                } else if (!word && model.pinyin != null && model.pinyin.contains(" ")) {
+                } else if (!word && !test && model.pinyin != null && model.pinyin.contains(" ")) {
                     viewedModel.add(model)
                     adapter.notifyDataSetChanged()
+                } else if (!word && test) {
+                    createTest(date)
                 }
             }
 
@@ -135,7 +145,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         viewedModel.clear()
         adapter.notifyDataSetChanged()
 
-        model.random()
+        model.shuffle()
 
         model.forEachIndexed { _, model ->
 
@@ -258,12 +268,15 @@ class MainActivity : AppCompatActivity(), KodeinAware {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 if (tab?.tag == "words" && date != null) {
                     word = true
+                    test = false
                     filterData(getDateToFirebase(date!!))
                 } else if (tab?.tag == "sentences" && date != null) {
                     word = false
+                    test = false
                     filterData(getDateToFirebase(date!!))
                 } else if (tab?.tag == "test" && date != null) {
-                    word = true
+                    word = false
+                    test = true
                     createTest(getDateToFirebase(date!!))
                 }
 
