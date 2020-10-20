@@ -12,19 +12,6 @@ data class User(
     var user_email: String? = null,
     var user_password: String? = null,
     var user_phone: String? = null,
-    var user_permission: String? = null,
-    var user_created_at: String? = null,
-    var user_updated_at: String? = null,
-    var user_currency: String? = null,
-    var user_qualification: String? = null,
-    var user_main_salary: String? = null,
-    var user_allowance: String? = null,
-    var user_company_group: String? = null,
-    var user_company: String? = null,
-    var user_branch_group: String? = null,
-    var user_branch: String? = null,
-    var user_appointment_date: String? = null,
-    var user_job_title: String? = null,
     var user_local: String? = null
 ) {
     @PrimaryKey(autoGenerate = false)
