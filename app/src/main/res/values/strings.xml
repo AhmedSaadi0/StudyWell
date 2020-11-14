@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Study Well</string>
+    <string name="app_name">HSK Words</string>
     <string name="pinyin">Pinyin</string>
     <string name="chinese">Chinese</string>
     <string name="meaning">Meaning</string>
@@ -22,5 +22,8 @@
     <string name="please_write_password">Please write the password</string>
     <string name="please_write_email">Please write the email</string>
     <string name="test">Test</string>
+    <string name="hsk">HSK</string>
+    <string name="account">Account</string>
+    <string name="adding_hsk1">Adding HSK1 Words, This operation happens only one time which is after installing …</string>
 
 </resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/hsk"
+        android:icon="@drawable/ic_baseline_menu_book_24"
+        android:title="@string/hsk"
+        />
+
+    <item android:id="@+id/account"
+        android:icon="@drawable/ic_baseline_person_24"
+        android:title="@string/account"
+        />
+
+</menu>

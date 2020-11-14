@@ -25,6 +25,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
+                android:textColor="@color/defaultColor"
                 android:textSize="20sp"
                 android:text="symbol"
 
@@ -36,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
+                android:textColor="@color/example_1_bg"
                 android:layout_marginEnd="10dp"
                 android:text="word" />
 
@@ -52,6 +54,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
+                    android:textColor="@color/info"
                     android:layout_marginBottom="10dp"
                     android:layout_toStartOf="@id/speak"
                     android:text="meaning" />

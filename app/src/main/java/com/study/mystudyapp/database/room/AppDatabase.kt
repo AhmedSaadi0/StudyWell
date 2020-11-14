@@ -4,25 +4,35 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.study.mystudyapp.database.room.categories.CategoriesDao
+import com.study.mystudyapp.database.room.categories.CategoriesTable
 import com.study.mystudyapp.database.room.users.User
 import com.study.mystudyapp.database.room.users.UserDao
+import com.study.mystudyapp.database.room.words.WordsDao
+import com.study.mystudyapp.database.room.words.WordsTable
 import net.sqlcipher.database.SupportFactory
 
 
 @Database(
     entities = [
-        User::class
+        User::class,
+        WordsTable::class,
+        CategoriesTable::class
     ],
 
     version = 1
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getUserDao(): UserDao
+    abstract fun getWordsTableDao(): WordsDao
+    abstract fun getCatTableDao(): CategoriesDao
+
+
     companion object {
 
         // for encryption
         private val passphrase =
-            net.sqlcipher.database.SQLiteDatabase.getBytes("1gGj0aeIjbHZaZBTFN1vOf3afd6RtPqHVOoX-UwvvonjZSrezFX2-PM".toCharArray())
+            net.sqlcipher.database.SQLiteDatabase.getBytes("1gGj0aeIjbHZaZBTFN1vOf3afd6RtPqHVOoX-hSETW51DSJWKOWU-PM".toCharArray())
 
         private val factory = SupportFactory(passphrase)
 
