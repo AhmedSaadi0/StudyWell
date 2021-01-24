@@ -18,14 +18,42 @@
         android:background="@color/white"
         tools:context=".ui.main.MainActivity">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/main_toolbar"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:layout_alignParentTop="true"
             android:background="@color/yellow"
             android:elevation="5dp"
-            app:navigationIcon="@drawable/ic_baseline_person_24" />
+
+            >
+
+            <ImageView
+                android:id="@+id/account_Image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:onClick="@{viewModel::openAccount}"
+                android:src="@drawable/ic_baseline_person_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+                />
+
+            <ImageView
+                android:id="@+id/hsk_Image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:onClick="@{viewModel::openHSK}"
+                android:src="@drawable/ic_baseline_menu_book_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/account_Image"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/this_month_appbar"
@@ -58,7 +86,6 @@
                     app:compactCalendarShouldSelectFirstDayOfMonthOnScroll="false"
                     app:compactCalendarTextSize="12sp"
                     app:layout_collapseMode="parallax" />
-
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
@@ -102,4 +129,7 @@
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
 </layout>
+

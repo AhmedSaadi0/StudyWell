@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">أدرس جيدا</string>
+    <string name="app_name">HSK Words</string>
     <string name="pinyin">Pinyin</string>
     <string name="chinese">Chinese</string>
     <string name="meaning">المعنى</string>
@@ -23,5 +23,7 @@
     <string name="please_write_password">اكتب كلمة السر</string>
     <string name="please_write_email">اكتب الايميل</string>
     <string name="test">اختبار</string>
+    <string name="hsk">HSK</string>
+    <string name="account">الحساب</string>
 
 </resources>

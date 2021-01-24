@@ -7,6 +7,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.study.mystudyapp.R
 import com.study.mystudyapp.databinding.ActivityLogInBinding
@@ -47,8 +48,10 @@ class LogInActivity : AppCompatActivity(), AuthListener, KodeinAware {
         progress_bar.visibility = View.VISIBLE
     }
 
+
     override fun onResult(loginResponse: LiveData<String>) {
-        loginResponse.observe(this, {
+
+        loginResponse.observe(this, Observer {
             // ارجع شل الرساله وفصلها على حسب الخطأ يا كلمة سر او ايميل او او او ... الخ
             if (it != "authenticated") {
                 if (it == "network error") {
@@ -62,6 +65,7 @@ class LogInActivity : AppCompatActivity(), AuthListener, KodeinAware {
             }
 
         })
+
     }
 
     override fun onEmptyFiled(message: String) {

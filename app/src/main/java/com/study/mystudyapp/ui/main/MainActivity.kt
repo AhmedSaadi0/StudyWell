@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -62,6 +63,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         //getData()
         initBottomTabLayout()
 
+        /*
         main_toolbar.setNavigationOnClickListener {
             startActivity(Intent(this, LogInActivity::class.java))
         }
@@ -72,8 +74,14 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                 main_toolbar.title = it.user_email
             }
         })
+*/
 
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.main_menu, menu)
+        return true
     }
 
     override fun onResume() {
@@ -104,6 +112,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
             }
 
             override fun onMonthScroll(firstDayOfNewMonth: Date?) {
+                date = firstDayOfNewMonth
                 if (firstDayOfNewMonth != null)
                     getData()
             }
@@ -113,7 +122,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
     }
 
-    private fun selector(p: WordsModel): String? = p.pinyin
+    private fun selector(p: WordsModel): String? = p.word
 
     private fun filterData(date: String) {
         viewedModel.clear()
@@ -167,7 +176,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
     private fun initRV() {
         adapter = MainRVAdapter(this, viewedModel)
         main_rv.adapter = adapter
-        main_rv.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        main_rv.layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
     }
 
 
@@ -191,7 +200,8 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                                 word = it.getString("symbol"),
                                 meaning = it.getString("meaning"),
                                 date = it.getString("date"),
-                                year = it.getString("year")
+                                year = it.getString("year"),
+                                type = ""
                             )
                         )
 
@@ -269,12 +279,16 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                 if (tab?.tag == "words" && date != null) {
                     word = true
                     test = false
+
+
                     filterData(getDateToFirebase(date!!))
                 } else if (tab?.tag == "sentences" && date != null) {
+
                     word = false
                     test = false
                     filterData(getDateToFirebase(date!!))
                 } else if (tab?.tag == "test" && date != null) {
+
                     word = false
                     test = true
                     createTest(getDateToFirebase(date!!))

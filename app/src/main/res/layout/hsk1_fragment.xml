@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="hskViewMode"
+            type="com.study.mystudyapp.ui.hsk.hsk1.Hsk1ViewModel" />
+    </data>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".ui.hsk.hsk1.Hsk1Fragment">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/hsk1_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/hsk1_main_tab_layout"
+            android:layout_alignParentTop="true"
+
+            />
+
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/hsk1_main_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white"
+            android:elevation="5dp" />
+
+
+    </RelativeLayout>
+</layout>
