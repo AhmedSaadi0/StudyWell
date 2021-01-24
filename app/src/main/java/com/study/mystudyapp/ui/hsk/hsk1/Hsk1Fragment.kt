@@ -1,6 +1,7 @@
 package com.study.mystudyapp.ui.hsk.hsk1
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.tabs.TabLayout
 import com.study.mystudyapp.R
 import com.study.mystudyapp.database.models.WordsModel
+import com.study.mystudyapp.database.repositories.HskRepository
 import com.study.mystudyapp.databinding.Hsk1FragmentBinding
 import com.study.mystudyapp.ui.main.MainActivity
 import kotlinx.android.synthetic.main.hsk1_fragment.*
@@ -52,25 +54,66 @@ class Hsk1Fragment : Fragment(), KodeinAware {
 
 
 
-        viewModel.getWords("1").observe(viewLifecycleOwner, { list ->
+        HskRepository.adding.observe(viewLifecycleOwner, { isEmpty ->
+            if (isEmpty) {
+                indexing.visibility = View.VISIBLE
+                adding_text.visibility = View.VISIBLE
 
-            if (list.isNotEmpty())
-                list.forEach {
-                    wordsModel.add(
-                        WordsModel(
-                            "",
-                            it.pinyin,
-                            it.word,
-                            type = it.type,
-                            it.meaning,
-                            year = "",
-                            date = ""
-                        )
-                    )
-                    filterData("word")
-                    //adapter.notifyDataSetChanged()
-                }
+                Handler().postDelayed(
+                    {
+                        indexing.visibility = View.GONE
+                        adding_text.visibility = View.GONE
+                        viewModel.getWords("1").observe(viewLifecycleOwner, { list ->
+
+                            if (list.isNotEmpty())
+                                list.forEach {
+                                    wordsModel.add(
+                                        WordsModel(
+                                            "",
+                                            it.pinyin,
+                                            it.word,
+                                            type = it.type,
+                                            it.meaning,
+                                            year = "",
+                                            date = ""
+                                        )
+                                    )
+                                    filterData("word")
+                                    //adapter.notifyDataSetChanged()
+                                }
+                        })
+
+                    },
+                    10000
+                )
+
+            } else {
+                indexing.visibility = View.GONE
+                adding_text.visibility = View.GONE
+                viewModel.getWords("1").observe(viewLifecycleOwner, { list ->
+
+                    if (list.isNotEmpty())
+                        list.forEach {
+                            wordsModel.add(
+                                WordsModel(
+                                    "",
+                                    it.pinyin,
+                                    it.word,
+                                    type = it.type,
+                                    it.meaning,
+                                    year = "",
+                                    date = ""
+                                )
+                            )
+                            filterData("word")
+                            //adapter.notifyDataSetChanged()
+                        }
+                })
+
+            }
         })
+
+
 
 
 

@@ -1,6 +1,7 @@
 package com.study.mystudyapp.database.repositories
 
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.study.mystudyapp.Coroutine
 import com.study.mystudyapp.database.room.AppDatabase
@@ -10,6 +11,10 @@ import com.study.mystudyapp.observeOnce
 class HskRepository(private val db: AppDatabase) {
 
 
+    companion object {
+        val adding = MutableLiveData<Boolean>()
+    }
+
     fun getWords(category: String) = db.getWordsTableDao().getAllWords()
 
     fun check(lifecycleOwner: LifecycleOwner) {
@@ -17,6 +22,8 @@ class HskRepository(private val db: AppDatabase) {
             .observeOnce(lifecycleOwner, Observer {
                 if (it == null || it.isEmpty()) {
                     insertWords()
+                } else {
+                    adding.value = false
                 }
             })
     }
@@ -25,6 +32,8 @@ class HskRepository(private val db: AppDatabase) {
     private fun insertWords() {
 
         Coroutine.main {
+
+            adding.value = true
 
             var w = ""
             val ww = mutableListOf<String>()
@@ -73,6 +82,7 @@ class HskRepository(private val db: AppDatabase) {
                 )
             }
 
+
         }
 
         Coroutine.main {
@@ -120,7 +130,7 @@ class HskRepository(private val db: AppDatabase) {
                         meaning = mm[index],
                         category = "1",
                         type = "sent",
-                        )
+                    )
                 )
             }
 

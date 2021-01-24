@@ -25,5 +25,6 @@
     <string name="test">اختبار</string>
     <string name="hsk">HSK</string>
     <string name="account">الحساب</string>
+    <string name="adding_hsk1">جاري اضافة كلمات ال HSK1, هذه العملية تحدث مرة واحدة فقط عند التثبيت … لا تستعجلش بيكمل سريع</string>
 
 </resources>
