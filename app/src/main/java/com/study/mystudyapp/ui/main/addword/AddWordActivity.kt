@@ -39,38 +39,35 @@ class AddWordActivity : AppCompatActivity() {
 
         val data: MutableMap<String, String> = HashMap()
 
-        if (add_word.text.isNullOrEmpty()) {
-            add_word.error = getString(R.string.empty)
+        data["word"] = add_word.text.toString()
+
+        if (!add_symbol.text.isNullOrEmpty())
+            data["symbol"] = add_symbol.text.toString()
+
+        if (!add_meaning.text.isNullOrEmpty())
+            data["meaning"] = add_meaning.text.toString()
+
+        if (MainActivity.date != null) {
+            data["date"] = getDateToFirebase(MainActivity.date!!)
+            data["year"] = getYearToFirebase(MainActivity.date!!)
         } else {
-            data["word"] = add_word.text.toString()
-
-            if (!add_symbol.text.isNullOrEmpty())
-                data["symbol"] = add_symbol.text.toString()
-
-            if (!add_meaning.text.isNullOrEmpty())
-                data["meaning"] = add_meaning.text.toString()
-
-            if (MainActivity.date != null) {
-                data["date"] = getDateToFirebase(MainActivity.date!!)
-                data["year"] = getYearToFirebase(MainActivity.date!!)
-            } else {
-                data["date"] = getDateToFirebase(Date())
-                data["year"] = getYearToFirebase(Date())
-            }
-
-            if (id.isNotEmpty())
-                FirebaseFirestore.getInstance()
-                    .collection("users").document(FirebaseAuth.getInstance().uid!!)
-                    .collection("words").document(id)
-                    .set(data)
-            else
-                FirebaseFirestore.getInstance()
-                    .collection("users").document(FirebaseAuth.getInstance().uid!!)
-                    .collection("words").document()
-                    .set(data)
-
-            finish()
+            data["date"] = getDateToFirebase(Date())
+            data["year"] = getYearToFirebase(Date())
         }
+
+        if (id.isNotEmpty())
+            FirebaseFirestore.getInstance()
+                .collection("users").document(FirebaseAuth.getInstance().uid!!)
+                .collection("words").document(id)
+                .set(data)
+        else
+            FirebaseFirestore.getInstance()
+                .collection("users").document(FirebaseAuth.getInstance().uid!!)
+                .collection("words").document()
+                .set(data)
+
+        finish()
+        
     }
 
     fun delete(view: View) {

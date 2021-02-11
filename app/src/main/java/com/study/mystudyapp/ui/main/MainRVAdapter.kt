@@ -1,5 +1,6 @@
 package com.study.mystudyapp.ui.main
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.speech.tts.TextToSpeech
@@ -44,9 +45,7 @@ class MainRVAdapter(private val context: Context, private val words: List<WordsM
         }else{
             holder.itemView.pinyin.text = ""
             holder.itemView.meaning.text = ""
-
         }
-
 
         if (position % 2 == 0) {
             holder.itemView.con.setPadding(0, 0, 10, 0)
@@ -61,7 +60,6 @@ class MainRVAdapter(private val context: Context, private val words: List<WordsM
                     it.putExtra("word", words[position].pinyin)
                     it.putExtra("symbol", words[position].word)
                     it.putExtra("meaning", words[position].meaning)
-
                     context.startActivity(it)
                 }
             } else {
@@ -85,6 +83,16 @@ class MainRVAdapter(private val context: Context, private val words: List<WordsM
             mTTS.speak(words[position].word, TextToSpeech.QUEUE_FLUSH, null)
         }
 
+
+        holder.itemView.card.setOnLongClickListener {
+            val v = AlertDialog.Builder(context)
+                .setTitle(context.getString(R.string.show_pinyin))
+                .setMessage(words[position].pinyin)
+
+
+            v.show()
+            true
+        }
 
     }
 
