@@ -279,11 +279,8 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                 if (tab?.tag == "words" && date != null) {
                     word = true
                     test = false
-
-
                     filterData(getDateToFirebase(date!!))
                 } else if (tab?.tag == "sentences" && date != null) {
-
                     word = false
                     test = false
                     filterData(getDateToFirebase(date!!))

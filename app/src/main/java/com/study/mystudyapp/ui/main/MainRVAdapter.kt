@@ -53,24 +53,6 @@ class MainRVAdapter(private val context: Context, private val words: List<WordsM
             holder.itemView.con.setPadding(10, 0, 0, 0)
         }
 
-        holder.itemView.con.setOnClickListener {
-            if (!words[position].test) {
-                Intent(context, AddWordActivity::class.java).also {
-                    it.putExtra("id", words[position].id)
-                    it.putExtra("word", words[position].pinyin)
-                    it.putExtra("symbol", words[position].word)
-                    it.putExtra("meaning", words[position].meaning)
-                    context.startActivity(it)
-                }
-            } else {
-                holder.itemView.pinyin.text = ""
-                holder.itemView.meaning.text = ""
-
-                holder.itemView.pinyin.text = words[position].pinyin
-                holder.itemView.meaning.text = words[position].meaning
-            }
-        }
-
 
 
         if (words[position].word.isNullOrBlank()) {
@@ -92,6 +74,24 @@ class MainRVAdapter(private val context: Context, private val words: List<WordsM
 
             v.show()
             true
+        }
+
+        holder.itemView.card.setOnClickListener {
+            if (!words[position].test) {
+                Intent(context, AddWordActivity::class.java).also {
+                    it.putExtra("id", words[position].id)
+                    it.putExtra("word", words[position].pinyin)
+                    it.putExtra("symbol", words[position].word)
+                    it.putExtra("meaning", words[position].meaning)
+                    context.startActivity(it)
+                }
+            } else {
+                holder.itemView.pinyin.text = ""
+                holder.itemView.meaning.text = ""
+
+                holder.itemView.pinyin.text = words[position].pinyin
+                holder.itemView.meaning.text = words[position].meaning
+            }
         }
 
     }
