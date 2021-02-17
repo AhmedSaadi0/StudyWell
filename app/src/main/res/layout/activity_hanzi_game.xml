@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="view_model"
             type="com.study.mystudyapp.ui.games.hanzi.HanziGameViewModel" />
-
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.games.hanzi.HanziGameActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp"
+            android:onClick="back"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_baseline_arrow_back_ios_24"
+            app:title="@string/words_game" />
 
         <TextView
             android:id="@+id/pinyin"
@@ -25,13 +35,16 @@
             app:layout_constraintBottom_toTopOf="@id/hanzi3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.29000002" />
 
         <TextView
             android:id="@+id/meaning"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="meaning"
+            android:textColor="@color/blue"
+            android:textSize="18sp"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/hanzi3"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,51 +53,207 @@
 
             app:layout_constraintVertical_bias="0.0" />
 
-        <Button
+
+        <androidx.cardview.widget.CardView
             android:id="@+id/hanzi1"
             android:layout_width="0dp"
             android:layout_height="120dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
             android:onClick="hanzi1"
-            android:text="Hanzi1"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="3dp"
             app:layout_constraintBottom_toTopOf="@id/next"
             app:layout_constraintEnd_toStartOf="@id/hanzi2"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent">
 
-        <Button
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/hanzi1_pinyin"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="pinyin"
+                    app:layout_constraintBottom_toTopOf="@+id/hanzi1_text"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/hanzi1_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="hanzi"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toTopOf="@id/hanzi1_meaning"
+                    app:layout_constraintTop_toBottomOf="@id/hanzi1_pinyin" />
+
+
+                <TextView
+                    android:id="@+id/hanzi1_meaning"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="meaning"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/hanzi1_text" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
             android:id="@+id/hanzi2"
             android:layout_width="0dp"
             android:layout_height="120dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:onClick="hanzi2"
-            android:text="Hanzi2"
             app:layout_constraintBottom_toTopOf="@id/next"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/hanzi1" />
+            app:layout_constraintStart_toEndOf="@id/hanzi1">
 
-        <Button
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/hanzi2_pinyin"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="pinyin"
+                    app:layout_constraintBottom_toTopOf="@+id/hanzi2_text"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/hanzi2_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="hanzi"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toTopOf="@id/hanzi2_meaning"
+                    app:layout_constraintTop_toBottomOf="@id/hanzi2_pinyin" />
+
+
+                <TextView
+                    android:id="@+id/hanzi2_meaning"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="meaning"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/hanzi2_text" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
             android:id="@+id/hanzi3"
             android:layout_width="0dp"
             android:layout_height="120dp"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
             android:onClick="hanzi3"
-            android:text="Hanzi3"
             app:layout_constraintBottom_toTopOf="@id/hanzi1"
             app:layout_constraintEnd_toStartOf="@id/hanzi4"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent">
 
-        <Button
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/hanzi3_pinyin"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="pinyin"
+                    app:layout_constraintBottom_toTopOf="@+id/hanzi3_text"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/hanzi3_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="hanzi"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toTopOf="@id/hanzi3_meaning"
+                    app:layout_constraintTop_toBottomOf="@id/hanzi3_pinyin" />
+
+
+                <TextView
+                    android:id="@+id/hanzi3_meaning"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="meaning"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/hanzi3_text" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
             android:id="@+id/hanzi4"
             android:layout_width="0dp"
             android:layout_height="120dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:onClick="hanzi4"
-            android:text="Hanzi4"
             app:layout_constraintBottom_toTopOf="@id/hanzi1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/hanzi3" />
+            app:layout_constraintStart_toEndOf="@id/hanzi3">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/hanzi4_pinyin"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="pinyin"
+                    app:layout_constraintBottom_toTopOf="@+id/hanzi4_text"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/hanzi4_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="hanzi"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toTopOf="@id/hanzi4_meaning"
+                    app:layout_constraintTop_toBottomOf="@id/hanzi4_pinyin" />
+
+
+                <TextView
+                    android:id="@+id/hanzi4_meaning"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="meaning"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/hanzi4_text" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
 
         <Button
             android:id="@+id/next"

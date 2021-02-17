@@ -1,6 +1,5 @@
 package com.study.mystudyapp.database.repositories
 
-import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -72,30 +71,23 @@ class UserRepository(private val db: AppDatabase) {
         db.getHanziGameDao().getRandomWordByDate(month, 10)
             .observeOnce(lifecycleOwner, {
                 done.value = false
-                if (it.isEmpty()) {
-                    Coroutine.main {
-                        words.forEachIndexed { _, wordsModel ->
-
-                            if (wordsModel.pinyin != null && wordsModel.hanzi != null && wordsModel.pinyin.isNotEmpty()) {
-
-                                Log.d("Pin", wordsModel.pinyin)
-
-                                db.getHanziGameDao().insert(
-                                    HanziGame(
-                                        meaning = wordsModel.meaning,
-                                        hanzi = wordsModel.hanzi,
-                                        pinyin = wordsModel.pinyin,
-                                        month = month,
-                                        seen_count = 0
-                                    )
+                Coroutine.main {
+                    words.forEachIndexed { _, wordsModel ->
+                        if (wordsModel.pinyin != null && wordsModel.hanzi != null && wordsModel.pinyin.isNotEmpty() && wordsModel.hanzi.length < 4) {
+                            db.getHanziGameDao().insert(
+                                HanziGame(
+                                    meaning = wordsModel.meaning,
+                                    hanzi = wordsModel.hanzi,
+                                    pinyin = wordsModel.pinyin,
+                                    month = month,
+                                    seen_count = 0
                                 )
-                            }
+                            )
                         }
-                        done.value = true
                     }
-                } else {
                     done.value = true
                 }
+
             })
         return done
     }

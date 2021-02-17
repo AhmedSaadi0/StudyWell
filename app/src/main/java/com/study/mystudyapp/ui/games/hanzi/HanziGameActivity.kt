@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.View
-import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -26,8 +26,11 @@ class HanziGameActivity : AppCompatActivity(), KodeinAware {
     private var _word = ""
     private var _viewModel: HanziGameViewModel? = null
     private var _month = ""
-    private var _buttonsList: List<Button>? = null
+    private var _hanziTextsList: List<TextView>? = null
+    private var _pinyinTextsList: List<TextView>? = null
+    private var _meaningTextsList: List<TextView>? = null
     private var row: HanziGame? = null
+    private var _index = 0
     private var words = mutableListOf<HanziGame>()
 
     private lateinit var mTTS: TextToSpeech
@@ -50,11 +53,23 @@ class HanziGameActivity : AppCompatActivity(), KodeinAware {
             toast("مابش اكسترا, خاطرك XD")
         }
 
-        _buttonsList = listOf(
-            hanzi1,
-            hanzi2,
-            hanzi3,
-            hanzi4
+        _hanziTextsList = listOf(
+            hanzi1_text,
+            hanzi2_text,
+            hanzi3_text,
+            hanzi4_text
+        )
+        _meaningTextsList = listOf(
+            hanzi1_meaning,
+            hanzi2_meaning,
+            hanzi3_meaning,
+            hanzi4_meaning
+        )
+        _pinyinTextsList = listOf(
+            hanzi1_pinyin,
+            hanzi2_pinyin,
+            hanzi3_pinyin,
+            hanzi4_pinyin
         )
 
         mTTS = TextToSpeech(this) { status ->
@@ -64,14 +79,15 @@ class HanziGameActivity : AppCompatActivity(), KodeinAware {
             }
         }
 
+        hideViews()
         setWords()
     }
 
     private fun setColors() {
-        hanzi1.background.setTint(this.getColor(R.color.button))
-        hanzi2.background.setTint(this.getColor(R.color.button))
-        hanzi3.background.setTint(this.getColor(R.color.button))
-        hanzi4.background.setTint(this.getColor(R.color.button))
+        hanzi1.background.setTint(this.getColor(R.color.white))
+        hanzi2.background.setTint(this.getColor(R.color.white))
+        hanzi3.background.setTint(this.getColor(R.color.white))
+        hanzi4.background.setTint(this.getColor(R.color.white))
     }
 
     private fun setWords() {
@@ -87,7 +103,7 @@ class HanziGameActivity : AppCompatActivity(), KodeinAware {
             meaning.visibility = View.GONE
 
             _chosenButtonNumber = rand(0, 3)
-            _buttonsList?.get(_chosenButtonNumber)?.text = it.hanzi
+            _hanziTextsList?.get(_chosenButtonNumber)?.text = it.hanzi
 
             fillOtherButtons(_word.length)
 
@@ -95,58 +111,37 @@ class HanziGameActivity : AppCompatActivity(), KodeinAware {
 
             row = it
 
+            mTTS.speak(row?.hanzi, TextToSpeech.QUEUE_FLUSH, null)
+
         })
     }
 
     private fun fillOtherButtons(length: Int) {
         words.clear()
         _viewModel?.getRandomWords(_month, length)?.observeOnce(this, {
-            _buttonsList?.forEachIndexed { index, button ->
+            _hanziTextsList?.forEachIndexed { index, hanzi_text ->
                 if (index != _chosenButtonNumber) {
-                    button.text = it[index].hanzi
+                    hanzi_text.text = it[index].hanzi
+
+                    _pinyinTextsList?.get(index)?.text = it[index].pinyin
+                    _meaningTextsList?.get(index)?.text = it[index].meaning
+
                     words.add(it[index])
+                } else {
+                    _index = index
                 }
             }
         })
     }
 
     fun next(view: View) {
+        hideViews()
         setWords()
     }
 
-    private fun setWrongWords() {
-        words.forEach {
-            if (it.hanzi == hanzi1.text) {
-                hanzi1.text = String.format(
-                    "%s\n%s",
-                    hanzi1.text,
-                    it.pinyin
-                )
-            } else if (it.hanzi == hanzi2.text) {
-                hanzi2.text =
-                    String.format(
-                    "%s\n%s",
-                    hanzi2.text,
-                    it.pinyin
-                )
-            } else if (it.hanzi == hanzi3.text) {
-                hanzi3.text = String.format(
-                    "%s\n%s",
-                    hanzi3.text,
-                    it.pinyin
-                )
-            } else if (it.hanzi == hanzi4.text) {
-                hanzi4.text = String.format(
-                    "%s\n%s",
-                    hanzi4.text,
-                    it.pinyin
-                )
-            }
-        }
-    }
 
     fun hanzi1(view: View) {
-        if (checkWord(hanzi1.text.toString())) {
+        if (checkWord(hanzi1_text.text.toString())) {
             hanzi1.background.setTint(this.getColor(R.color.danger))
         } else {
             hanzi1.background.setTint(this.getColor(R.color.success))
@@ -154,7 +149,7 @@ class HanziGameActivity : AppCompatActivity(), KodeinAware {
     }
 
     fun hanzi2(view: View) {
-        if (checkWord(hanzi2.text.toString())) {
+        if (checkWord(hanzi2_text.text.toString())) {
             hanzi2.background.setTint(this.getColor(R.color.danger))
         } else {
             hanzi2.background.setTint(this.getColor(R.color.success))
@@ -162,7 +157,7 @@ class HanziGameActivity : AppCompatActivity(), KodeinAware {
     }
 
     fun hanzi3(view: View) {
-        if (checkWord(hanzi3.text.toString())) {
+        if (checkWord(hanzi3_text.text.toString())) {
             hanzi3.background.setTint(this.getColor(R.color.danger))
         } else {
             hanzi3.background.setTint(this.getColor(R.color.success))
@@ -170,7 +165,7 @@ class HanziGameActivity : AppCompatActivity(), KodeinAware {
     }
 
     fun hanzi4(view: View) {
-        if (checkWord(hanzi4.text.toString())) {
+        if (checkWord(hanzi4_text.text.toString())) {
             hanzi4.background.setTint(this.getColor(R.color.danger))
         } else {
             hanzi4.background.setTint(this.getColor(R.color.success))
@@ -190,9 +185,27 @@ class HanziGameActivity : AppCompatActivity(), KodeinAware {
                     _viewModel?.addMoreSeen(row!!)
                 }
             }
-            setWrongWords()
+            showViews()
         }
         return word != _word
     }
+
+    private fun showViews() {
+        _pinyinTextsList?.forEachIndexed { index, pinyin ->
+            if (_index != index) {
+                pinyin.visibility = View.VISIBLE
+                _meaningTextsList?.get(index)?.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun hideViews() {
+        _pinyinTextsList?.forEachIndexed { index, pinyin ->
+            pinyin.visibility = View.GONE
+            _meaningTextsList?.get(index)?.visibility = View.GONE
+        }
+    }
+
+    fun back(view: View) = finish()
 
 }

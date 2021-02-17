@@ -10,7 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.games.hanzi.HanziGameActivity"></activity>
+        <activity android:name=".ui.games.hanzi.HanziGameActivity" />
         <activity android:name=".ui.hsk.MainHskActivity" />
         <activity
             android:name=".ui.login.LogInActivity"

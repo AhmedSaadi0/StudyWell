@@ -6,7 +6,7 @@ import androidx.room.*
 @Dao
 interface HanziGameDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(newWord: HanziGame): Long
 
     @Query("SELECT * FROM hanzigame WHERE month=:month order by seen_count ASC")
