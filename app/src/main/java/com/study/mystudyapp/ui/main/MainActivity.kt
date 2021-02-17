@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         val year = getYearToFirebase(date!!)
         if (FirebaseAuth.getInstance().uid == null) {
             FirebaseFirestore.getInstance()
-                .collection("users").document("JSY3LPJlI5h7DuYWEhddYzX3DDm2")
+                .collection("users").document("<FIREBASEID>")
                 .collection("words")
                 .whereEqualTo("year", year)
                 .orderBy("word")

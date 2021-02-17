@@ -6,11 +6,9 @@ import androidx.room.PrimaryKey
 @Entity()
 data class HanziGame(
     var meaning: String? = null,
-    var hanzi: String? = null,
+    @PrimaryKey()
+    var hanzi: String,
     var pinyin: String? = null,
     var month: String? = null,
     var seen_count: Int,
-) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
-}
+)

@@ -48,8 +48,6 @@
             android:layout_marginBottom="5dp"
             android:onClick="hanzi1"
             android:text="Hanzi1"
-            android:textSize="20sp"
-
             app:layout_constraintBottom_toTopOf="@id/next"
             app:layout_constraintEnd_toStartOf="@id/hanzi2"
             app:layout_constraintStart_toStartOf="parent" />
@@ -62,8 +60,6 @@
             android:layout_marginBottom="5dp"
             android:onClick="hanzi2"
             android:text="Hanzi2"
-
-            android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@id/next"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/hanzi1" />
@@ -75,7 +71,6 @@
             android:layout_marginStart="5dp"
             android:onClick="hanzi3"
             android:text="Hanzi3"
-            android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@id/hanzi1"
             app:layout_constraintEnd_toStartOf="@id/hanzi4"
             app:layout_constraintStart_toStartOf="parent" />
@@ -87,8 +82,6 @@
             android:layout_marginEnd="5dp"
             android:onClick="hanzi4"
             android:text="Hanzi4"
-
-            android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@id/hanzi1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/hanzi3" />

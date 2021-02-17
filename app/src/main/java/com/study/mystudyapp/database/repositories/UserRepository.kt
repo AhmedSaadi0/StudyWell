@@ -76,7 +76,7 @@ class UserRepository(private val db: AppDatabase) {
                     Coroutine.main {
                         words.forEachIndexed { _, wordsModel ->
 
-                            if (wordsModel.pinyin != null && wordsModel.pinyin.isNotEmpty()) {
+                            if (wordsModel.pinyin != null && wordsModel.hanzi != null && wordsModel.pinyin.isNotEmpty()) {
 
                                 Log.d("Pin", wordsModel.pinyin)
 
