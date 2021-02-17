@@ -28,7 +28,7 @@
 
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/word"
+                    android:id="@+id/list_hanzi"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -41,7 +41,7 @@
                     />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/pinyin"
+                    android:id="@+id/list_pinyin"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"

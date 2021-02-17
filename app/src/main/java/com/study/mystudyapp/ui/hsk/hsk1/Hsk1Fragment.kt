@@ -178,7 +178,6 @@ class Hsk1Fragment : Fragment(), KodeinAware {
         adapter = HSK1RVAdapter(requireContext().applicationContext, filterModel)
         hsk1_rv.adapter = adapter
         hsk1_rv.layoutManager = layout
-
     }
 
     private fun selector(p: WordsModel): String? = p.pinyin

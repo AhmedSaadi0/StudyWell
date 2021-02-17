@@ -37,13 +37,13 @@ class MainRVAdapter(private val context: Context, private val words: List<WordsM
     }
 
     override fun onBindViewHolder(holder: MainRVViewHolder, position: Int) {
-        holder.itemView.word.text = words[position].word
+        holder.itemView.list_hanzi.text = words[position].hanzi
 
         if (!words[position].test) {
-            holder.itemView.pinyin.text = words[position].pinyin
+            holder.itemView.list_pinyin.text = words[position].pinyin
             holder.itemView.meaning.text = words[position].meaning
-        }else{
-            holder.itemView.pinyin.text = ""
+        } else {
+            holder.itemView.list_pinyin.text = ""
             holder.itemView.meaning.text = ""
         }
 
@@ -55,14 +55,14 @@ class MainRVAdapter(private val context: Context, private val words: List<WordsM
 
 
 
-        if (words[position].word.isNullOrBlank()) {
+        if (words[position].hanzi.isNullOrBlank()) {
             holder.itemView.speak.visibility = View.GONE
         } else {
             holder.itemView.speak.visibility = View.VISIBLE
         }
 
         holder.itemView.speak.setOnClickListener {
-            mTTS.speak(words[position].word, TextToSpeech.QUEUE_FLUSH, null)
+            mTTS.speak(words[position].hanzi, TextToSpeech.QUEUE_FLUSH, null)
         }
 
 
@@ -81,15 +81,15 @@ class MainRVAdapter(private val context: Context, private val words: List<WordsM
                 Intent(context, AddWordActivity::class.java).also {
                     it.putExtra("id", words[position].id)
                     it.putExtra("word", words[position].pinyin)
-                    it.putExtra("symbol", words[position].word)
+                    it.putExtra("symbol", words[position].hanzi)
                     it.putExtra("meaning", words[position].meaning)
                     context.startActivity(it)
                 }
             } else {
-                holder.itemView.pinyin.text = ""
+                holder.itemView.list_pinyin.text = ""
                 holder.itemView.meaning.text = ""
 
-                holder.itemView.pinyin.text = words[position].pinyin
+                holder.itemView.list_pinyin.text = words[position].pinyin
                 holder.itemView.meaning.text = words[position].meaning
             }
         }

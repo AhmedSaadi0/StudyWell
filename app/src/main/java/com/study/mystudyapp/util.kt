@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.random.Random
 
 fun getDateToFirebase(date: Date): String {
     val sdf = SimpleDateFormat("yyyyMMdd", Locale.ENGLISH)
@@ -60,4 +61,7 @@ fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observ
 
 }
 
-
+fun rand(start: Int, end: Int): Int {
+    require(!(start > end || end - start + 1 > Int.MAX_VALUE)) { "Illegal Argument" }
+    return Random(System.nanoTime()).nextInt(end - start + 1) + start
+}

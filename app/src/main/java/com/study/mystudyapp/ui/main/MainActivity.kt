@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.View
+import android.widget.ProgressBar
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -40,6 +42,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
     private var started = false
     private var word = true
     private var test = false
+    private var _viewModel: MainViewModel? = null
 
     companion object {
         var date: Date? = null
@@ -51,8 +54,8 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         val binding: MainActivityBinding =
             DataBindingUtil.setContentView(this, R.layout.main_activity)
 
-        val viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
-        binding.viewModel = viewModel
+        _viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
+        binding.viewModel = _viewModel
 
 
         //moveData()
@@ -62,6 +65,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         initCalender()
         //getData()
         initBottomTabLayout()
+
 
         /*
         main_toolbar.setNavigationOnClickListener {
@@ -117,12 +121,11 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                     getData()
             }
 
-
         })
 
     }
 
-    private fun selector(p: WordsModel): String? = p.word
+    private fun selector(p: WordsModel): String? = p.hanzi
 
     private fun filterData(date: String) {
         viewedModel.clear()
@@ -179,11 +182,55 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         main_rv.layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
     }
 
+    private fun checking(year: String) {
+        val dialog = AlertDialog.Builder(this).create()
+        dialog.setTitle("Setting up ... please wait")
+        dialog.setView(ProgressBar(this))
+
+        _viewModel?.checkHanziGame(this, year, model)?.observe(this, {
+            if (!it) {
+                dialog.show()
+            } else {
+                dialog.dismiss()
+            }
+            Log.d("Value", it.toString())
+        })
+    }
+
 
     private fun getData() {
 
         val year = getYearToFirebase(date!!)
-        if (FirebaseAuth.getInstance().uid != null) {
+        if (FirebaseAuth.getInstance().uid == null) {
+            FirebaseFirestore.getInstance()
+                .collection("users").document("JSY3LPJlI5h7DuYWEhddYzX3DDm2")
+                .collection("words")
+                .whereEqualTo("year", year)
+                .orderBy("word")
+                .addSnapshotListener { value, _ ->
+
+                    model.clear()
+                    value?.forEach {
+                        model.add(
+                            WordsModel(
+                                id = it.id,
+                                pinyin = it.getString("word"),
+                                hanzi = it.getString("symbol"),
+                                meaning = it.getString("meaning"),
+                                date = it.getString("date"),
+                                year = it.getString("year"),
+                                type = ""
+                            )
+                        )
+
+                        adapter.notifyDataSetChanged()
+
+                    }
+
+                    checking(year)
+                    setEvents()
+                }
+        } else if (FirebaseAuth.getInstance().uid != null) {
             FirebaseFirestore.getInstance()
                 .collection("users").document(FirebaseAuth.getInstance().uid!!)
                 .collection("words")
@@ -197,18 +244,17 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                             WordsModel(
                                 id = it.id,
                                 pinyin = it.getString("word"),
-                                word = it.getString("symbol"),
+                                hanzi = it.getString("symbol"),
                                 meaning = it.getString("meaning"),
                                 date = it.getString("date"),
                                 year = it.getString("year"),
                                 type = ""
                             )
                         )
-
                         adapter.notifyDataSetChanged()
-
                     }
 
+                    checking(year)
                     setEvents()
                 }
         }

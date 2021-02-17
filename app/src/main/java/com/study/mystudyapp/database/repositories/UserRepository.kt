@@ -1,11 +1,16 @@
 package com.study.mystudyapp.database.repositories
 
+import android.util.Log
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.study.mystudyapp.Coroutine
+import com.study.mystudyapp.database.models.WordsModel
 import com.study.mystudyapp.database.room.AppDatabase
+import com.study.mystudyapp.database.room.games.HanziGame
 import com.study.mystudyapp.database.room.users.User
+import com.study.mystudyapp.observeOnce
 
 class UserRepository(private val db: AppDatabase) {
 
@@ -55,5 +60,45 @@ class UserRepository(private val db: AppDatabase) {
             }
         return loginResponse
     }
+
+
+    fun setGame(
+        lifecycleOwner: LifecycleOwner,
+        month: String,
+        words: List<WordsModel>
+    ): LiveData<Boolean> {
+        val done = MutableLiveData<Boolean>()
+
+        db.getHanziGameDao().getRandomWordByDate(month, 10)
+            .observeOnce(lifecycleOwner, {
+                done.value = false
+                if (it.isEmpty()) {
+                    Coroutine.main {
+                        words.forEachIndexed { _, wordsModel ->
+
+                            if (wordsModel.pinyin != null && wordsModel.pinyin.isNotEmpty()) {
+
+                                Log.d("Pin", wordsModel.pinyin)
+
+                                db.getHanziGameDao().insert(
+                                    HanziGame(
+                                        meaning = wordsModel.meaning,
+                                        hanzi = wordsModel.hanzi,
+                                        pinyin = wordsModel.pinyin,
+                                        month = month,
+                                        seen_count = 0
+                                    )
+                                )
+                            }
+                        }
+                        done.value = true
+                    }
+                } else {
+                    done.value = true
+                }
+            })
+        return done
+    }
+
 
 }

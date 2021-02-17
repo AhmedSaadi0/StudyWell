@@ -1,7 +1,6 @@
 package com.study.mystudyapp.ui.hsk.hsk1
 
 import android.content.Context
-import android.content.Intent
 import android.speech.tts.TextToSpeech
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +8,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.study.mystudyapp.R
 import com.study.mystudyapp.database.models.WordsModel
-import com.study.mystudyapp.ui.main.addword.AddWordActivity
 import kotlinx.android.synthetic.main.word_list_item.view.*
 import java.util.*
 
@@ -36,13 +34,13 @@ class HSK1RVAdapter(context: Context, private val words: List<WordsModel>) :
     }
 
     override fun onBindViewHolder(holder: MainRVViewHolder, position: Int) {
-        holder.itemView.word.text = words[position].word
+        holder.itemView.list_hanzi.text = words[position].hanzi
 
         if (!words[position].test) {
-            holder.itemView.pinyin.text = words[position].pinyin
+            holder.itemView.list_pinyin.text = words[position].pinyin
             holder.itemView.meaning.text = words[position].meaning
         }else{
-            holder.itemView.pinyin.text = ""
+            holder.itemView.list_pinyin.text = ""
             holder.itemView.meaning.text = ""
 
         }
@@ -59,24 +57,24 @@ class HSK1RVAdapter(context: Context, private val words: List<WordsModel>) :
             if (!words[position].test) {
                 // صلح حاجه تعرض النص بعدا
             } else {
-                holder.itemView.pinyin.text = ""
+                holder.itemView.list_pinyin.text = ""
                 holder.itemView.meaning.text = ""
 
-                holder.itemView.pinyin.text = words[position].pinyin
+                holder.itemView.list_pinyin.text = words[position].pinyin
                 holder.itemView.meaning.text = words[position].meaning
             }
         }
 
 
 
-        if (words[position].word.isNullOrBlank()) {
+        if (words[position].hanzi.isNullOrBlank()) {
             holder.itemView.speak.visibility = View.GONE
         } else {
             holder.itemView.speak.visibility = View.VISIBLE
         }
 
         holder.itemView.speak.setOnClickListener {
-            mTTS.speak(words[position].word, TextToSpeech.QUEUE_FLUSH, null)
+            mTTS.speak(words[position].hanzi, TextToSpeech.QUEUE_FLUSH, null)
         }
 
 

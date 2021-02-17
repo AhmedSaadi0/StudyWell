@@ -6,6 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.study.mystudyapp.database.room.categories.CategoriesDao
 import com.study.mystudyapp.database.room.categories.CategoriesTable
+import com.study.mystudyapp.database.room.games.HanziGame
+import com.study.mystudyapp.database.room.games.HanziGameDao
 import com.study.mystudyapp.database.room.users.User
 import com.study.mystudyapp.database.room.users.UserDao
 import com.study.mystudyapp.database.room.words.WordsDao
@@ -17,6 +19,7 @@ import net.sqlcipher.database.SupportFactory
     entities = [
         User::class,
         WordsTable::class,
+        HanziGame::class,
         CategoriesTable::class
     ],
 
@@ -26,6 +29,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun getUserDao(): UserDao
     abstract fun getWordsTableDao(): WordsDao
     abstract fun getCatTableDao(): CategoriesDao
+    abstract fun getHanziGameDao(): HanziGameDao
 
 
     companion object {

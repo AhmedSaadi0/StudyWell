@@ -24,6 +24,7 @@
     <color name="example_1_bg">#3A284C</color>
     <color name="example_1_bg_light">#433254</color>
     <color name="example_1_white_light">#4DFFFFFF</color>
+    <color name="button">#d6d7d7</color>
     <color name="example_1_white_light_">#DDDDDD</color>
     <color name="example_1_white">#D9FFFFFF</color>
 
