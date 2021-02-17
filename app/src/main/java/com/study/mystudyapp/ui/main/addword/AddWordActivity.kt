@@ -30,15 +30,15 @@ class AddWordActivity : AppCompatActivity(), KodeinAware {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_word)
+//        setContentView(R.layout.activity_add_word)
 
 
-//        val binding: ActivityAddWordBinding =
-//            DataBindingUtil.setContentView(this, R.layout.activity_add_word)
-//
-//        _viewModel = ViewModelProvider(this, factory).get(AddWordViewModel::class.java)
-//
-//        binding.addWordViewMode = _viewModel
+        val binding: ActivityAddWordBinding =
+            DataBindingUtil.setContentView(this, R.layout.activity_add_word)
+
+        _viewModel = ViewModelProvider(this, factory).get(AddWordViewModel::class.java)
+
+        binding.addWordViewMode = _viewModel
 
         if (intent.hasExtra("id"))
             getData()
