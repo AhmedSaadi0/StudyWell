@@ -11,4 +11,5 @@ data class HanziGame(
     var pinyin: String? = null,
     var month: String? = null,
     var seen_count: Int,
+    var word_length: Int,
 )

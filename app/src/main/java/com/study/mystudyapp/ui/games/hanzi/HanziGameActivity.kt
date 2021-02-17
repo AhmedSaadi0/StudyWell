@@ -2,15 +2,17 @@ package com.study.mystudyapp.ui.games.hanzi
 
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import com.study.mystudyapp.*
+import com.study.mystudyapp.Coroutine
+import com.study.mystudyapp.R
 import com.study.mystudyapp.database.room.games.HanziGame
 import com.study.mystudyapp.databinding.ActivityHanziGameBinding
+import com.study.mystudyapp.observeOnce
+import com.study.mystudyapp.toast
 import kotlinx.android.synthetic.main.activity_hanzi_game.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
@@ -22,16 +24,17 @@ class HanziGameActivity : AppCompatActivity(), KodeinAware {
 
     override val kodein by kodein()
     private val factory: HanziGameViewModelFactory by instance()
-    private var _chosenButtonNumber = 0
-    private var _word = ""
+
     private var _viewModel: HanziGameViewModel? = null
     private var _month = ""
+    private var _word = ""
+
     private var _hanziTextsList: List<TextView>? = null
     private var _pinyinTextsList: List<TextView>? = null
     private var _meaningTextsList: List<TextView>? = null
-    private var row: HanziGame? = null
-    private var _index = 0
-    private var words = mutableListOf<HanziGame>()
+
+    private var _selectedIndex = 0
+    private val _model = mutableListOf<HanziGame>()
 
     private lateinit var mTTS: TextToSpeech
 
@@ -91,46 +94,40 @@ class HanziGameActivity : AppCompatActivity(), KodeinAware {
     }
 
     private fun setWords() {
-        _viewModel?.getOneWord(date = _month)?.observeOnce(this, {
+        _model.clear()
 
+        _viewModel?.getOneWord(date = _month)?.observeOnce(this, {
+            _model.add(it)
             _word = it.hanzi
 
             pinyin.text = it.pinyin
-            Log.d("Pin", "setWords: ${it.pinyin}")
-
             meaning.text = it.meaning
-
             meaning.visibility = View.GONE
 
-            _chosenButtonNumber = rand(0, 3)
-            _hanziTextsList?.get(_chosenButtonNumber)?.text = it.hanzi
-
-            fillOtherButtons(_word.length)
-
+            fillOtherButtons(it.word_length)
             setColors()
-
-            row = it
-
-            mTTS.speak(row?.hanzi, TextToSpeech.QUEUE_FLUSH, null)
-
         })
     }
 
     private fun fillOtherButtons(length: Int) {
-        words.clear()
-        _viewModel?.getRandomWords(_month, length)?.observeOnce(this, {
-            _hanziTextsList?.forEachIndexed { index, hanzi_text ->
-                if (index != _chosenButtonNumber) {
-                    hanzi_text.text = it[index].hanzi
 
-                    _pinyinTextsList?.get(index)?.text = it[index].pinyin
-                    _meaningTextsList?.get(index)?.text = it[index].meaning
+        _viewModel?.getRandomWords(_month, length)?.observeOnce(this, { mainRandom ->
+            mainRandom.forEach { hanziGame ->
+                _model.add(hanziGame)
+            }
 
-                    words.add(it[index])
-                } else {
-                    _index = index
+            _model.shuffle()
+            _model.forEachIndexed { index, hanziGame ->
+                _hanziTextsList?.get(index)?.text = hanziGame.hanzi
+                _pinyinTextsList?.get(index)?.text = hanziGame.pinyin
+                _meaningTextsList?.get(index)?.text = hanziGame.meaning
+
+                if (_word == hanziGame.hanzi) {
+                    _selectedIndex = index
+                    mTTS.speak(_model[_selectedIndex].hanzi, TextToSpeech.QUEUE_FLUSH, null)
                 }
             }
+
         })
     }
 
@@ -173,26 +170,24 @@ class HanziGameActivity : AppCompatActivity(), KodeinAware {
     }
 
     private fun checkWord(word: String): Boolean {
-        if (word == _word) {
+        if (word == _model[_selectedIndex].hanzi) {
 
             meaning.visibility = View.VISIBLE
 
-            mTTS.speak(row?.hanzi, TextToSpeech.QUEUE_FLUSH, null)
+            mTTS.speak(_model[_selectedIndex].hanzi, TextToSpeech.QUEUE_FLUSH, null)
 
-            if (row?.seen_count != null) {
-                row!!.seen_count += 1
-                Coroutine.main {
-                    _viewModel?.addMoreSeen(row!!)
-                }
+            _model[_selectedIndex]!!.seen_count += 1
+            Coroutine.main {
+                _viewModel?.addMoreSeen(_model[_selectedIndex])
             }
             showViews()
         }
-        return word != _word
+        return word != _model[_selectedIndex].hanzi
     }
 
     private fun showViews() {
         _pinyinTextsList?.forEachIndexed { index, pinyin ->
-            if (_index != index) {
+            if (_selectedIndex != index) {
                 pinyin.visibility = View.VISIBLE
                 _meaningTextsList?.get(index)?.visibility = View.VISIBLE
             }

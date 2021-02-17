@@ -92,7 +92,8 @@ class AddWordActivity : AppCompatActivity(), KodeinAware {
                 hanzi = add_symbol.text.toString(),
                 pinyin = add_word.text.toString(),
                 month = getDateToFirebase(Date()),
-                seen_count = 0
+                seen_count = 0,
+                word_length = add_symbol.length()
             )
         )
 

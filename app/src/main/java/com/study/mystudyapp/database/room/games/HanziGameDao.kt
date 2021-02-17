@@ -18,7 +18,7 @@ interface HanziGameDao {
     @Update
     suspend fun update(row: HanziGame)
 
-    @Query("SELECT * FROM hanzigame WHERE month=:month and length(hanzi) <= :length order by RANDOM() LIMIT 4")
+    @Query("SELECT * FROM hanzigame WHERE word_length=:length and month=:month order by RANDOM() LIMIT 3")
     fun getRandomWordByDate(month: String, length: Int): LiveData<List<HanziGame>>
 
 }

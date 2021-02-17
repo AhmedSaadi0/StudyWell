@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
     private val model = mutableListOf<WordsModel>()
     private val viewedModel = mutableListOf<WordsModel>()
     private lateinit var adapter: MainRVAdapter
-    private var started = false
+    private var gameReady = false
     private var word = true
     private var test = false
     private var _viewModel: MainViewModel? = null
@@ -88,12 +88,6 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         return true
     }
 
-    override fun onResume() {
-        super.onResume()
-        getData()
-
-    }
-
     fun add(view: View) {
         if (FirebaseAuth.getInstance().uid != null) {
             startActivity(Intent(this, AddWordActivity::class.java))
@@ -117,12 +111,19 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
             override fun onMonthScroll(firstDayOfNewMonth: Date?) {
                 date = firstDayOfNewMonth
-                if (firstDayOfNewMonth != null)
+                if (firstDayOfNewMonth != null) {
                     getData()
+                    gameReady = false
+                }
             }
 
         })
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        getData()
     }
 
     private fun selector(p: WordsModel): String? = p.hanzi
@@ -183,27 +184,29 @@ class MainActivity : AppCompatActivity(), KodeinAware {
     }
 
     private fun checking(year: String) {
-        val dialog = AlertDialog.Builder(this).create()
-        dialog.setTitle("Setting up ... please wait")
-        dialog.setView(ProgressBar(this))
+        if (!gameReady) {
+            val dialog = AlertDialog.Builder(this).create()
+            dialog.setTitle("Setting up ... please wait")
+            dialog.setView(ProgressBar(this))
 
-        _viewModel?.checkHanziGame(this, year, model)?.observe(this, {
-            if (!it) {
-                dialog.show()
-            } else {
-                dialog.dismiss()
-            }
-            Log.d("Value", it.toString())
-        })
+            _viewModel?.checkHanziGame(this, year, model)?.observe(this, {
+                if (!it) {
+                    dialog.show()
+                } else {
+                    dialog.dismiss()
+                }
+                Log.d("Value", it.toString())
+            })
+            gameReady = true
+        }
     }
 
 
     private fun getData() {
-
         val year = getYearToFirebase(date!!)
         if (FirebaseAuth.getInstance().uid == null) {
             FirebaseFirestore.getInstance()
-                .collection("users").document("NO")
+                .collection("users").document("ID")
                 .collection("words")
                 .whereEqualTo("year", year)
                 .orderBy("word")
@@ -229,6 +232,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
                     checking(year)
                     setEvents()
+
                 }
         } else if (FirebaseAuth.getInstance().uid != null) {
             FirebaseFirestore.getInstance()
@@ -302,8 +306,6 @@ class MainActivity : AppCompatActivity(), KodeinAware {
             date = Date()
         }
         filterData(getDateToFirebase(date!!))
-        started = !started
-
     }
 
     private fun initBottomTabLayout() {

@@ -1,5 +1,6 @@
 package com.study.mystudyapp.database.repositories
 
+import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -68,19 +69,23 @@ class UserRepository(private val db: AppDatabase) {
     ): LiveData<Boolean> {
         val done = MutableLiveData<Boolean>()
 
+
         db.getHanziGameDao().getRandomWordByDate(month, 10)
             .observeOnce(lifecycleOwner, {
+
                 done.value = false
                 Coroutine.main {
                     words.forEachIndexed { _, wordsModel ->
-                        if (wordsModel.pinyin != null && wordsModel.hanzi != null && wordsModel.pinyin.isNotEmpty() && wordsModel.hanzi.length < 4) {
+
+                        if (wordsModel.pinyin != null && wordsModel.hanzi != null && wordsModel.pinyin.isNotEmpty() && wordsModel.hanzi.length <= 4) {
                             db.getHanziGameDao().insert(
                                 HanziGame(
                                     meaning = wordsModel.meaning,
                                     hanzi = wordsModel.hanzi,
                                     pinyin = wordsModel.pinyin,
                                     month = month,
-                                    seen_count = 0
+                                    seen_count = 0,
+                                    word_length = wordsModel.hanzi.length
                                 )
                             )
                         }
