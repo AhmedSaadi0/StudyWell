@@ -8,5 +8,6 @@ class HanziGameViewModel(private val repo: GamesRepository) : ViewModel() {
     fun getWords(date: String) = repo.getWords(date)
     suspend fun addMoreSeen(row: HanziGame) = repo.setMoreSeen(row)
     fun getOneWord(date: String) = repo.getOneWord(date)
-    fun getRandomWords(month: String, length: Int) = repo.getRandomWords(month, length)
+    fun getRandomWords(month: String, length: Int, hanzi: String) =
+        repo.getRandomWords(month, length, hanzi)
 }

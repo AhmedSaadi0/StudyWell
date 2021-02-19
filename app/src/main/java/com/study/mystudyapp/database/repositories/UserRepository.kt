@@ -10,6 +10,7 @@ import com.study.mystudyapp.database.models.WordsModel
 import com.study.mystudyapp.database.room.AppDatabase
 import com.study.mystudyapp.database.room.games.HanziGame
 import com.study.mystudyapp.database.room.users.User
+import com.study.mystudyapp.getDateToCalender
 import com.study.mystudyapp.observeOnce
 
 class UserRepository(private val db: AppDatabase) {
@@ -69,15 +70,23 @@ class UserRepository(private val db: AppDatabase) {
     ): LiveData<Boolean> {
         val done = MutableLiveData<Boolean>()
 
-
-        db.getHanziGameDao().getRandomWordByDate(month, 10)
+        db.getHanziGameDao().getRandomWordByDate(month, 10, "")
             .observeOnce(lifecycleOwner, {
 
                 done.value = false
                 Coroutine.main {
                     words.forEachIndexed { _, wordsModel ->
+                        Log.d(
+                            "TAG",
+                            "setGame: getDateToCalender ${getDateToCalender(wordsModel.date!!)?.day} | ${wordsModel.pinyin}"
+                        )
 
-                        if (wordsModel.pinyin != null && wordsModel.hanzi != null && wordsModel.pinyin.isNotEmpty() && wordsModel.hanzi.length <= 4) {
+                        if (wordsModel.pinyin != null &&
+                            wordsModel.hanzi != null &&
+                            wordsModel.pinyin.isNotEmpty() &&
+                            wordsModel.hanzi.length <= 4 &&
+                            getDateToCalender(wordsModel.date)?.day != 5
+                        ) {
                             db.getHanziGameDao().insert(
                                 HanziGame(
                                     meaning = wordsModel.meaning,

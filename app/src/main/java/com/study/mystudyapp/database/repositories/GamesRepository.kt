@@ -12,8 +12,8 @@ class GamesRepository(private val db: AppDatabase) {
     fun getOneWord(month: String) = db.getHanziGameDao().getOneWordByDate(month)
 
 
-    fun getRandomWords(month: String, length: Int) =
-        db.getHanziGameDao().getRandomWordByDate(month, length)
+    fun getRandomWords(month: String, length: Int, hanzi: String) =
+        db.getHanziGameDao().getRandomWordByDate(month, length, hanzi)
 
     fun getWords(month: String): LiveData<List<HanziGame>> {
         val data = MutableLiveData<List<HanziGame>>()

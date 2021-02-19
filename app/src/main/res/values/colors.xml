@@ -30,6 +30,7 @@
 
     <color name="transparent">#00ffffff</color>
     <color name="danger">#ff3548</color>
+    <color name="red">#820201</color>
     <color name="success">#01c851</color>
     <color name="warning">#ff8800</color>
     <color name="info">#33b5e7</color>

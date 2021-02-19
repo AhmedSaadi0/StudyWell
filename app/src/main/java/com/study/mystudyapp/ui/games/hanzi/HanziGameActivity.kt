@@ -104,14 +104,14 @@ class HanziGameActivity : AppCompatActivity(), KodeinAware {
             meaning.text = it.meaning
             meaning.visibility = View.GONE
 
-            fillOtherButtons(it.word_length)
+            fillOtherButtons(it.word_length, it.hanzi)
             setColors()
         })
     }
 
-    private fun fillOtherButtons(length: Int) {
+    private fun fillOtherButtons(length: Int, hanzi: String) {
 
-        _viewModel?.getRandomWords(_month, length)?.observeOnce(this, { mainRandom ->
+        _viewModel?.getRandomWords(_month, length, hanzi)?.observeOnce(this, { mainRandom ->
             mainRandom.forEach { hanziGame ->
                 _model.add(hanziGame)
             }

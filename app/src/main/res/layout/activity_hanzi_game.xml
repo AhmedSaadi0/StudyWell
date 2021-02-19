@@ -61,8 +61,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
             android:onClick="hanzi1"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="3dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="5dp"
             app:layout_constraintBottom_toTopOf="@id/next"
             app:layout_constraintEnd_toStartOf="@id/hanzi2"
             app:layout_constraintStart_toStartOf="parent">
@@ -113,6 +113,9 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:onClick="hanzi2"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="5dp"
+
             app:layout_constraintBottom_toTopOf="@id/next"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/hanzi1">
@@ -162,6 +165,9 @@
             android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
             android:onClick="hanzi3"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="5dp"
+
             app:layout_constraintBottom_toTopOf="@id/hanzi1"
             app:layout_constraintEnd_toStartOf="@id/hanzi4"
             app:layout_constraintStart_toStartOf="parent">
@@ -212,6 +218,9 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:onClick="hanzi4"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="5dp"
+
             app:layout_constraintBottom_toTopOf="@id/hanzi1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/hanzi3">
@@ -263,6 +272,8 @@
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
             android:onClick="next"
+            android:backgroundTint="@color/colorPrimary"
+            android:elevation="5dp"
             android:text="@string/next"
             app:layout_constraintBottom_toBottomOf="parent" />
 
