@@ -91,7 +91,7 @@ class AddWordActivity : AppCompatActivity(), KodeinAware {
                 meaning = add_meaning.text.toString(),
                 hanzi = add_symbol.text.toString(),
                 pinyin = add_word.text.toString(),
-                month = getDateToFirebase(Date()),
+                month = getYearToFirebase(Date()),
                 seen_count = 0,
                 word_length = add_symbol.length()
             )

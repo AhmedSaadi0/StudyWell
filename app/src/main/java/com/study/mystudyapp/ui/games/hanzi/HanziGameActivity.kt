@@ -2,6 +2,7 @@ package com.study.mystudyapp.ui.games.hanzi
 
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -97,15 +98,18 @@ class HanziGameActivity : AppCompatActivity(), KodeinAware {
         _model.clear()
 
         _viewModel?.getOneWord(date = _month)?.observeOnce(this, {
-            _model.add(it)
-            _word = it.hanzi
 
-            pinyin.text = it.pinyin
-            meaning.text = it.meaning
-            meaning.visibility = View.GONE
+            if (it != null) {
+                _model.add(it)
+                _word = it.hanzi
 
-            fillOtherButtons(it.word_length, it.hanzi)
-            setColors()
+                pinyin.text = it.pinyin
+                meaning.text = it.meaning
+                meaning.visibility = View.GONE
+
+                fillOtherButtons(it.word_length, it.hanzi)
+                setColors()
+            }
         })
     }
 
