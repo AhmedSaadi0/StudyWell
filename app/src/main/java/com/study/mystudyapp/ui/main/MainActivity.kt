@@ -20,9 +20,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.study.mystudyapp.R
 import com.study.mystudyapp.database.models.WordsModel
 import com.study.mystudyapp.databinding.MainActivityBinding
-import com.study.mystudyapp.setFromStringToFullDate
 import com.study.mystudyapp.getFullDate
 import com.study.mystudyapp.getYearAndMonth
+import com.study.mystudyapp.setFromStringToFullDate
 import com.study.mystudyapp.ui.login.LogInActivity
 import com.study.mystudyapp.ui.main.addword.AddWordActivity
 import kotlinx.android.synthetic.main.main_activity.*
