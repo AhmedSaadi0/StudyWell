@@ -6,12 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.study.mystudyapp.R
+import com.study.mystudyapp.*
 import com.study.mystudyapp.database.room.games.HanziGame
 import com.study.mystudyapp.databinding.ActivityAddWordBinding
-import com.study.mystudyapp.getDateToFirebase
-import com.study.mystudyapp.getYearToFirebase
 import com.study.mystudyapp.ui.main.MainActivity
 import kotlinx.android.synthetic.main.activity_add_word.*
 import org.kodein.di.KodeinAware
@@ -68,35 +67,64 @@ class AddWordActivity : AppCompatActivity(), KodeinAware {
             data["meaning"] = add_meaning.text.toString()
 
         if (MainActivity.date != null) {
-            data["date"] = getDateToFirebase(MainActivity.date!!)
-            data["year"] = getYearToFirebase(MainActivity.date!!)
+            data["date"] = getFullDate(MainActivity.date!!)
+            data["year"] = getYearAndMonth(MainActivity.date!!)
         } else {
-            data["date"] = getDateToFirebase(Date())
-            data["year"] = getYearToFirebase(Date())
+            data["date"] = getFullDate(Date())
+            data["year"] = getYearAndMonth(Date())
         }
 
-        if (id.isNotEmpty())
+        if (id.isNotEmpty()) {
             FirebaseFirestore.getInstance()
                 .collection("users").document(FirebaseAuth.getInstance().uid!!)
                 .collection("words").document(id)
                 .set(data)
-        else
-            FirebaseFirestore.getInstance()
-                .collection("users").document(FirebaseAuth.getInstance().uid!!)
-                .collection("words").document()
-                .set(data)
 
-        _viewModel?.insertNewWord(
-            HanziGame(
-                meaning = add_meaning.text.toString(),
-                hanzi = add_symbol.text.toString(),
-                pinyin = add_word.text.toString(),
-                month = getYearToFirebase(Date()),
-                seen_count = 0,
-                word_length = add_symbol.length()
-            )
-        )
+            _viewModel?.getWordById(id)?.observeOnce(this, {
+                Coroutine.main {
 
+                    _viewModel?.updateWord(
+                        HanziGame(
+                            id = id,
+                            meaning = add_meaning.text.toString(),
+                            hanzi = add_symbol.text.toString(),
+                            pinyin = add_word.text.toString(),
+                            month = it.month,
+                            day = it.day,
+                            seen_count = it.seen_count,
+                            word_length = add_symbol.length()
+                        )
+                    )
+
+                }
+            })
+
+        } else {
+
+            val c: CollectionReference = FirebaseFirestore.getInstance().collection("users")
+                .document(FirebaseAuth.getInstance().uid!!)
+                .collection("words")
+
+            c.document().set(data)
+
+            Coroutine.main {
+
+
+                _viewModel?.insertNewWord(
+                    HanziGame(
+                        id = c.id,
+                        meaning = add_meaning.text.toString(),
+                        hanzi = add_symbol.text.toString(),
+                        pinyin = add_word.text.toString(),
+                        month = getYearAndMonth(Date()),
+                        day = getFullDate(Date()),
+                        seen_count = 0,
+                        word_length = add_symbol.length()
+                    )
+                )
+
+            }
+        }
         finish()
 
     }

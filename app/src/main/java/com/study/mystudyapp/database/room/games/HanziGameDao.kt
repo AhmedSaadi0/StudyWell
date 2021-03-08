@@ -12,8 +12,14 @@ interface HanziGameDao {
     @Query("SELECT * FROM hanzigame WHERE month=:month order by seen_count ASC")
     fun getWordsByDate(month: String): LiveData<List<HanziGame>>
 
+   @Query("SELECT * FROM hanzigame WHERE id=:id")
+    fun getOneWordsById(id: String): LiveData<HanziGame>
+
     @Query("SELECT * FROM hanzigame WHERE month=:month order by seen_count ASC LIMIT 1")
     fun getOneWordByDate(month: String): LiveData<HanziGame>
+
+    @Query("SELECT * FROM hanzigame WHERE day=:day order by seen_count ASC LIMIT 1")
+    fun getOneWordByDay(day: String): LiveData<HanziGame>
 
     @Update
     suspend fun update(row: HanziGame)

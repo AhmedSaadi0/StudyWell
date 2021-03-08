@@ -2,7 +2,6 @@ package com.study.mystudyapp.ui.games.hanzi
 
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +27,7 @@ class HanziGameActivity : AppCompatActivity(), KodeinAware {
 
     private var _viewModel: HanziGameViewModel? = null
     private var _month = ""
+    private var _day = ""
     private var _word = ""
 
     private var _hanziTextsList: List<TextView>? = null
@@ -50,11 +50,18 @@ class HanziGameActivity : AppCompatActivity(), KodeinAware {
 
         binding.viewModel = _viewModel
 
-        if (intent.hasExtra("month")) {
-            _month = intent.getStringExtra("month")
-        } else {
-            finish()
-            toast("مابش اكسترا, خاطرك XD")
+        when {
+            intent.hasExtra("day") && intent.hasExtra("month") -> {
+                _day = intent.getStringExtra("day")!!
+                _month = intent.getStringExtra("month")!!
+            }
+            intent.hasExtra("month") -> {
+                _month = intent.getStringExtra("month")!!
+            }
+            else -> {
+                finish()
+                toast("مابش اكسترا, خاطرك XD")
+            }
         }
 
         _hanziTextsList = listOf(
@@ -63,12 +70,14 @@ class HanziGameActivity : AppCompatActivity(), KodeinAware {
             hanzi3_text,
             hanzi4_text
         )
+
         _meaningTextsList = listOf(
             hanzi1_meaning,
             hanzi2_meaning,
             hanzi3_meaning,
             hanzi4_meaning
         )
+
         _pinyinTextsList = listOf(
             hanzi1_pinyin,
             hanzi2_pinyin,
@@ -97,20 +106,38 @@ class HanziGameActivity : AppCompatActivity(), KodeinAware {
     private fun setWords() {
         _model.clear()
 
-        _viewModel?.getOneWord(date = _month)?.observeOnce(this, {
+        if (_month.isNotEmpty() && _day.isEmpty()) {
 
-            if (it != null) {
-                _model.add(it)
-                _word = it.hanzi
+            _viewModel?.getOneWordByDate(date = _month)?.observeOnce(this, {
 
-                pinyin.text = it.pinyin
-                meaning.text = it.meaning
-                meaning.visibility = View.GONE
+                if (it != null) {
+                    _model.add(it)
+                    _word = it.hanzi
 
-                fillOtherButtons(it.word_length, it.hanzi)
-                setColors()
-            }
-        })
+                    pinyin.text = it.pinyin
+                    meaning.text = it.meaning
+                    meaning.visibility = View.GONE
+
+                    fillOtherButtons(it.word_length, it.hanzi)
+                    setColors()
+                }
+            })
+        } else if (_day.isNotEmpty()) {
+            _viewModel?.getOneWordByDay(day = _day)?.observeOnce(this, {
+
+                if (it != null) {
+                    _model.add(it)
+                    _word = it.hanzi
+
+                    pinyin.text = it.pinyin
+                    meaning.text = it.meaning
+                    meaning.visibility = View.GONE
+
+                    fillOtherButtons(it.word_length, it.hanzi)
+                    setColors()
+                }
+            })
+        }
     }
 
     private fun fillOtherButtons(length: Int, hanzi: String) {

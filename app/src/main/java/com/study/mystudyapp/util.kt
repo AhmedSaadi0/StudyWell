@@ -11,18 +11,18 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random
 
-fun getDateToFirebase(date: Date): String {
+fun getFullDate(date: Date): String {
     val sdf = SimpleDateFormat("yyyyMMdd", Locale.ENGLISH)
     return sdf.format(date)
 }
 
-fun getYearToFirebase(date: Date): String {
+fun getYearAndMonth(date: Date): String {
     val sdf = SimpleDateFormat("yyyyMM", Locale.ENGLISH)
     return sdf.format(date)
 }
 
 
-fun getDateToCalender(date: String): Date? {
+fun setFromStringToFullDate(date: String): Date? {
     val sdf = SimpleDateFormat("yyyyMMdd", Locale.ENGLISH)
     return try {
         sdf.parse(date)

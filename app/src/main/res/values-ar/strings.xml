@@ -29,5 +29,8 @@
     <string name="show_pinyin">Showing pinyin</string>
     <string name="next">التالي</string>
     <string name="words_game">لعبة الكلمات</string>
+    <string name="choose_type">احتر نوع</string>
+    <string name="this_day">هذا اليوم</string>
+    <string name="this_month">هذا الشهر</string>
 
 </resources>

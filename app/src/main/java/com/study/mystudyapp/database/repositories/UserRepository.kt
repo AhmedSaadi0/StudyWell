@@ -9,7 +9,10 @@ import com.study.mystudyapp.database.models.WordsModel
 import com.study.mystudyapp.database.room.AppDatabase
 import com.study.mystudyapp.database.room.games.HanziGame
 import com.study.mystudyapp.database.room.users.User
+import com.study.mystudyapp.getFullDate
+import com.study.mystudyapp.getYearAndMonth
 import com.study.mystudyapp.observeOnce
+import java.util.*
 
 class UserRepository(private val db: AppDatabase) {
 
@@ -63,12 +66,12 @@ class UserRepository(private val db: AppDatabase) {
 
     fun setGame(
         lifecycleOwner: LifecycleOwner,
-        month: String,
+        date: Date,
         words: List<WordsModel>
     ): LiveData<Boolean> {
         val done = MutableLiveData<Boolean>()
 
-        db.getHanziGameDao().getRandomWordByDate(month, 10, "")
+        db.getHanziGameDao().getRandomWordByDate(getYearAndMonth(date), 10, "")
             .observeOnce(lifecycleOwner, {
 
                 done.value = false
@@ -82,10 +85,12 @@ class UserRepository(private val db: AppDatabase) {
                         ) {
                             db.getHanziGameDao().insert(
                                 HanziGame(
+                                    id = wordsModel.id,
                                     meaning = wordsModel.meaning,
                                     hanzi = wordsModel.hanzi,
                                     pinyin = wordsModel.pinyin,
-                                    month = month,
+                                    month = getYearAndMonth(date),
+                                    day = wordsModel.date!!,
                                     seen_count = 0,
                                     word_length = wordsModel.hanzi.length
                                 )

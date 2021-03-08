@@ -28,5 +28,8 @@
     <string name="show_pinyin">Showing pinyin</string>
     <string name="next">Next</string>
     <string name="words_game">Word\'s game</string>
+    <string name="choose_type">Choose a type</string>
+    <string name="this_day">This day</string>
+    <string name="this_month">This month</string>
 
 </resources>

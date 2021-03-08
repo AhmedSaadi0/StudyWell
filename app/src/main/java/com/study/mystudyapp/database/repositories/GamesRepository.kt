@@ -2,14 +2,15 @@ package com.study.mystudyapp.database.repositories
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.study.mystudyapp.Coroutine
 import com.study.mystudyapp.database.room.AppDatabase
 import com.study.mystudyapp.database.room.games.HanziGame
 
 class GamesRepository(private val db: AppDatabase) {
 
     suspend fun setMoreSeen(row: HanziGame) = db.getHanziGameDao().update(row)
-    fun getOneWord(month: String) = db.getHanziGameDao().getOneWordByDate(month)
+    fun getOneWordByDate(month: String) = db.getHanziGameDao().getOneWordByDate(month)
+
+    fun getOneWordByDay(day: String) = db.getHanziGameDao().getOneWordByDay(day)
 
 
     fun getRandomWords(month: String, length: Int, hanzi: String) =
@@ -22,11 +23,10 @@ class GamesRepository(private val db: AppDatabase) {
     }
 
 
-    fun insertNewWord(word: HanziGame) {
-        Coroutine.main {
-            db.getHanziGameDao().insert(word)
-        }
-    }
+    fun getWordById(id: String) = db.getHanziGameDao().getOneWordsById(id)
+
+    suspend fun insertNewWord(word: HanziGame) = db.getHanziGameDao().insert(word)
+    suspend fun updateWord(word: HanziGame) = db.getHanziGameDao().update(word)
 
 
 }

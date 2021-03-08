@@ -20,9 +20,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.study.mystudyapp.R
 import com.study.mystudyapp.database.models.WordsModel
 import com.study.mystudyapp.databinding.MainActivityBinding
-import com.study.mystudyapp.getDateToCalender
-import com.study.mystudyapp.getDateToFirebase
-import com.study.mystudyapp.getYearToFirebase
+import com.study.mystudyapp.setFromStringToFullDate
+import com.study.mystudyapp.getFullDate
+import com.study.mystudyapp.getYearAndMonth
 import com.study.mystudyapp.ui.login.LogInActivity
 import com.study.mystudyapp.ui.main.addword.AddWordActivity
 import kotlinx.android.synthetic.main.main_activity.*
@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
             override fun onDayClick(dateClicked: Date?) {
                 date = dateClicked
                 if (dateClicked != null)
-                    filterData(getDateToFirebase(dateClicked))
+                    filterData(getFullDate(dateClicked))
 
             }
 
@@ -183,13 +183,13 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         main_rv.layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
     }
 
-    private fun checking(year: String) {
+    private fun checking(date: Date) {
         if (!gameReady) {
             val dialog = AlertDialog.Builder(this).create()
             dialog.setTitle("Setting up ... please wait")
             dialog.setView(ProgressBar(this))
 
-            _viewModel?.checkHanziGame(this, year, model)?.observe(this, {
+            _viewModel?.checkHanziGame(this, date, model)?.observe(this, {
                 if (!it) {
                     dialog.show()
                 } else {
@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
 
     private fun getData() {
-        val year = getYearToFirebase(date!!)
+        val year = getYearAndMonth(date!!)
         if (FirebaseAuth.getInstance().uid == null) {
             FirebaseFirestore.getInstance()
                 .collection("users").document("")
@@ -230,7 +230,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
                     }
 
-                    checking(year)
+                    checking(date!!)
                     setEvents()
 
                 }
@@ -258,7 +258,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                         adapter.notifyDataSetChanged()
                     }
 
-                    checking(year)
+                    checking(date!!)
                     setEvents()
                 }
         }
@@ -297,7 +297,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
             main_compat_calender.addEvent(
                 Event(
                     Color.rgb(0, 0, 0),
-                    getDateToCalender(it.date.toString())?.time!!
+                    setFromStringToFullDate(it.date.toString())?.time!!
                 )
             )
         }
@@ -305,7 +305,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         if (date == null) {
             date = Date()
         }
-        filterData(getDateToFirebase(date!!))
+        filterData(getFullDate(date!!))
     }
 
     private fun initBottomTabLayout() {
@@ -327,16 +327,16 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                 if (tab?.tag == "words" && date != null) {
                     word = true
                     test = false
-                    filterData(getDateToFirebase(date!!))
+                    filterData(getFullDate(date!!))
                 } else if (tab?.tag == "sentences" && date != null) {
                     word = false
                     test = false
-                    filterData(getDateToFirebase(date!!))
+                    filterData(getFullDate(date!!))
                 } else if (tab?.tag == "test" && date != null) {
 
                     word = false
                     test = true
-                    createTest(getDateToFirebase(date!!))
+                    createTest(getFullDate(date!!))
                 }
 
                 Log.d("TAG", "onTabSelected: Selected${tab?.tag}")
