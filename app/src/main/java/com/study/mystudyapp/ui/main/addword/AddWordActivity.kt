@@ -1,6 +1,7 @@
 package com.study.mystudyapp.ui.main.addword
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -25,7 +26,11 @@ class AddWordActivity : AppCompatActivity(), KodeinAware {
     private val factory: AddWordViewModelFactory by instance()
     private var _viewModel: AddWordViewModel? = null
 
-    private var id = "";
+    private var id = ""
+    private var _month = ""
+    private var _day = ""
+    private var _seenCount = 0
+    private var _date = MainActivity.date
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,13 +49,30 @@ class AddWordActivity : AppCompatActivity(), KodeinAware {
         else {
             delete.visibility = View.GONE
         }
+
     }
 
     private fun getData() {
         id = intent.getStringExtra("id")!!
+
         add_word.setText(intent.getStringExtra("word"))
         add_symbol.setText(intent.getStringExtra("symbol"))
         add_meaning.setText(intent.getStringExtra("meaning"))
+
+        _viewModel?.getWordById(id)?.observeOnce(this, {
+
+            if (it != null) {
+                if (it.month != null) {
+                    _month = it.month.toString()
+                } else {
+                    if (MainActivity.date != null) {
+                        _month = getYearAndMonth(MainActivity.date!!)
+                    }
+                }
+                _day = it.day
+                _seenCount = it.seen_count
+            }
+        })
         delete.visibility = View.VISIBLE
     }
 
@@ -80,24 +102,23 @@ class AddWordActivity : AppCompatActivity(), KodeinAware {
                 .collection("words").document(id)
                 .set(data)
 
-            _viewModel?.getWordById(id)?.observeOnce(this, {
-                Coroutine.main {
 
+            if (_day.isNotEmpty()) {
+                Coroutine.main {
                     _viewModel?.updateWord(
                         HanziGame(
                             id = id,
                             meaning = add_meaning.text.toString(),
                             hanzi = add_symbol.text.toString(),
                             pinyin = add_word.text.toString(),
-                            month = it.month,
-                            day = it.day,
-                            seen_count = it.seen_count,
+                            month = _month,
+                            day = _day,
+                            seen_count = _seenCount,
                             word_length = add_symbol.length()
                         )
                     )
-
                 }
-            })
+            }
 
         } else {
 
@@ -107,12 +128,46 @@ class AddWordActivity : AppCompatActivity(), KodeinAware {
 
             c.document().set(data)
 
+            if (add_symbol.text != null && add_symbol.text?.length!! <= 4) {
+                Coroutine.main {
+                    if (_date == null) {
+                        _date = try {
+                            MainActivity.date
+                        } catch (ex: NullPointerException) {
+                            Date()
+                        }
+                    }
+                    Log.d("TAG", "save: $_date")
+                    _viewModel?.insertNewWord(
+                        HanziGame(
+                            id = c.id,
+                            meaning = add_meaning.text.toString(),
+                            hanzi = add_symbol.text.toString(),
+                            pinyin = add_word.text.toString(),
+                            month = getYearAndMonth(_date!!),
+                            day = getFullDate(_date!!),
+                            seen_count = 0,
+                            word_length = add_symbol.length()
+                        )
+                    )
+                }
+            }
+        }
+
+        finish()
+    }
+
+    fun delete(view: View) {
+        if (FirebaseAuth.getInstance().uid != null) {
+
+            FirebaseFirestore.getInstance()
+                .collection("users").document(FirebaseAuth.getInstance().uid!!)
+                .collection("words").document(id)
+                .delete()
             Coroutine.main {
-
-
-                _viewModel?.insertNewWord(
+                _viewModel?.deleteWord(
                     HanziGame(
-                        id = c.id,
+                        id = id,
                         meaning = add_meaning.text.toString(),
                         hanzi = add_symbol.text.toString(),
                         pinyin = add_word.text.toString(),
@@ -122,18 +177,9 @@ class AddWordActivity : AppCompatActivity(), KodeinAware {
                         word_length = add_symbol.length()
                     )
                 )
-
             }
+
         }
-        finish()
-
-    }
-
-    fun delete(view: View) {
-        FirebaseFirestore.getInstance()
-            .collection("users").document(FirebaseAuth.getInstance().uid!!)
-            .collection("words").document(id)
-            .delete()
 
         finish()
     }

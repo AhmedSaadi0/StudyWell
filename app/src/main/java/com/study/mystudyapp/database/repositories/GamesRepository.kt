@@ -27,6 +27,7 @@ class GamesRepository(private val db: AppDatabase) {
 
     suspend fun insertNewWord(word: HanziGame) = db.getHanziGameDao().insert(word)
     suspend fun updateWord(word: HanziGame) = db.getHanziGameDao().update(word)
+    suspend fun deleteWord(word: HanziGame) = db.getHanziGameDao().delete(word)
 
 
 }

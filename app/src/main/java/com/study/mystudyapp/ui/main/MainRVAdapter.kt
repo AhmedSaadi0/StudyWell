@@ -8,8 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.study.mystudyapp.R
 import com.study.mystudyapp.database.models.WordsModel
+import com.study.mystudyapp.toast
 import com.study.mystudyapp.ui.main.addword.AddWordActivity
 import kotlinx.android.synthetic.main.word_list_item.view.*
 import java.util.*
@@ -76,21 +78,27 @@ class MainRVAdapter(private val context: Context, private val words: List<WordsM
             true
         }
 
-        holder.itemView.card.setOnClickListener {
-            if (!words[position].test) {
-                Intent(context, AddWordActivity::class.java).also {
-                    it.putExtra("id", words[position].id)
-                    it.putExtra("word", words[position].pinyin)
-                    it.putExtra("symbol", words[position].hanzi)
-                    it.putExtra("meaning", words[position].meaning)
-                    context.startActivity(it)
+        holder.itemView.card.setOnClickListener { view ->
+
+            if (FirebaseAuth.getInstance().uid != null) {
+                if (!words[position].test) {
+                    Intent(context, AddWordActivity::class.java).also {
+                        it.putExtra("id", words[position].id)
+                        it.putExtra("word", words[position].pinyin)
+                        it.putExtra("symbol", words[position].hanzi)
+                        it.putExtra("meaning", words[position].meaning)
+                        it.putExtra("see_count", words[position].meaning)
+                        context.startActivity(it)
+                    }
+                } else {
+                    holder.itemView.list_pinyin.text = ""
+                    holder.itemView.meaning.text = ""
+
+                    holder.itemView.list_pinyin.text = words[position].pinyin
+                    holder.itemView.meaning.text = words[position].meaning
                 }
             } else {
-                holder.itemView.list_pinyin.text = ""
-                holder.itemView.meaning.text = ""
-
-                holder.itemView.list_pinyin.text = words[position].pinyin
-                holder.itemView.meaning.text = words[position].meaning
+                view.context.toast(view.context.getString(R.string.you_are_not_registered))
             }
         }
 

@@ -32,5 +32,6 @@
     <string name="choose_type">احتر نوع</string>
     <string name="this_day">هذا اليوم</string>
     <string name="this_month">هذا الشهر</string>
+    <string name="you_are_not_registered">انت غير مسجل الدخول, الرجاء تسجيل الدخول لاضافة كلماتك الخاصة</string>
 
 </resources>

@@ -31,5 +31,6 @@
     <string name="choose_type">Choose a type</string>
     <string name="this_day">This day</string>
     <string name="this_month">This month</string>
+    <string name="you_are_not_registered">You are not registered, Please register to use your own words</string>
 
 </resources>

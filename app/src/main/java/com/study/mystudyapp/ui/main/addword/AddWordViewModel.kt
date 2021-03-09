@@ -7,6 +7,7 @@ import com.study.mystudyapp.database.room.games.HanziGame
 class AddWordViewModel(private val repo: GamesRepository) : ViewModel() {
     suspend fun insertNewWord(word: HanziGame) = repo.insertNewWord(word)
     suspend fun updateWord(word: HanziGame) = repo.updateWord(word)
+    suspend fun deleteWord(word: HanziGame) = repo.deleteWord(word)
     fun getWordById(id: String) = repo.getWordById(id)
 
 }
